@@ -13,3 +13,4 @@ Initial public package preparation for `codex-run-ledger`.
 - Added conservative safety defaults: skipped draft/canceled/example prompts, consumed prompts when a paired result exists, fail-closed handling for multiple runnable prompts, and forbidden `main`/`master` execution targets.
 - Added explicit opt-in gates for real Codex execution.
 - Added documentation for the protocol, ChatGPT prompt helpers, execution enablement policy, runner plan, Git execution design, and local executor invocation design.
+- Added verification-only GitHub Actions CI for tests and package dry-run checks.

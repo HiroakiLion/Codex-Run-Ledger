@@ -69,3 +69,7 @@ See these references for the deeper details:
 - `LOCAL_EXECUTOR_INVOCATION_DESIGN.md` for Codex invocation design.
 
 For ChatGPT planning prompts that help propose bounded autonomous slices before an official prompt is approved, see `CHATGPT_PROMPT_HELPERS.md`.
+
+## Repository CI
+
+The repository CI runs `npm test` and `npm pack --dry-run` for pull requests and pushes to `main`. It is intentionally verification-only: it does not publish to npm, create GitHub releases, push tags, or deploy anything.

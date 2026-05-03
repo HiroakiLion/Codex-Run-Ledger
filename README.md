@@ -152,3 +152,5 @@ If the result file already exists, the prompt is considered consumed and will no
 npm test
 npm pack --dry-run
 ```
+
+The GitHub Actions CI workflow runs the same checks on pull requests and pushes to `main`. It does not publish packages, create releases, or push tags.
