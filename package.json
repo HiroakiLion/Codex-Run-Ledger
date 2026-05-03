@@ -1,0 +1,52 @@
+{
+  "name": "codex-run-ledger",
+  "version": "0.1.0",
+  "description": "A Git-backed prompt/result ledger for controlled Codex runs.",
+  "type": "module",
+  "main": "./scripts/codex-runs/cli.mjs",
+  "exports": {
+    ".": "./scripts/codex-runs/cli.mjs",
+    "./config": "./scripts/codex-runs/config.mjs",
+    "./detector": "./scripts/codex-runs/detect-approved-prompts.mjs",
+    "./executor": "./scripts/codex-runs/local-executor.mjs",
+    "./review": "./scripts/codex-runs/review-summary-builder.mjs"
+  },
+  "bin": {
+    "codex-run-ledger": "./scripts/codex-runs/cli.mjs",
+    "crl": "./scripts/codex-runs/cli.mjs"
+  },
+  "files": [
+    "docs/",
+    "scripts/",
+    "codex-run-ledger.config.example.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test scripts/codex-runs/*.test.mjs",
+    "ledger:init": "node scripts/codex-runs/init.mjs",
+    "ledger:detect": "node scripts/codex-runs/detect-approved-prompts.mjs",
+    "ledger:dry-run": "node scripts/codex-runs/local-runner-dry-run.mjs",
+    "ledger:executor": "node scripts/codex-runs/local-executor.mjs",
+    "ledger:review": "node scripts/codex-runs/review-summary-builder.mjs"
+  },
+  "keywords": [
+    "codex",
+    "automation",
+    "agent",
+    "ledger",
+    "workflow"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HiroakiLion/Codex-Run-Ledger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HiroakiLion/Codex-Run-Ledger/issues"
+  },
+  "homepage": "https://github.com/HiroakiLion/Codex-Run-Ledger#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}

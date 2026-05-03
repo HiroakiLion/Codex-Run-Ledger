@@ -1,0 +1,9 @@
+{
+  "protocolVersion": 1,
+  "promptDir": "docs/codex-runs",
+  "targetRepo": "your-repo-name",
+  "stableTargetBranches": ["workbench"],
+  "sliceBranchPrefix": "codex/",
+  "forbiddenTargetBranches": ["main", "master"],
+  "docsOnlyAllowedRoots": ["docs/codex-runs/"]
+}
