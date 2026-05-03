@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 
 This project uses semver-style version numbers, with human approval required before any public npm publish, tag, or GitHub release.
 
-## 0.1.0 - Unreleased
+## 0.1.0 - 2026-05-04
 
-Initial public package preparation for `codex-run-ledger`.
+Initial public release for `codex-run-ledger`.
 
 - Added the Git-backed prompt/result ledger protocol for controlled Codex runs.
 - Added CLI commands for initialization, prompt detection, dry-run planning, executor readiness, and review summaries.
