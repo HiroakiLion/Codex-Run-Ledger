@@ -177,6 +177,7 @@ If the result file already exists, the prompt is considered consumed and will no
 - [Runner plan](docs/codex-runs/RUNNER_PLAN.md)
 - [Git execution design](docs/codex-runs/GIT_EXECUTION_DESIGN.md)
 - [Local executor invocation design](docs/codex-runs/LOCAL_EXECUTOR_INVOCATION_DESIGN.md)
+- [Release checklist](docs/codex-runs/RELEASE_CHECKLIST.md)
 - [Changelog](CHANGELOG.md)
 
 ## Development

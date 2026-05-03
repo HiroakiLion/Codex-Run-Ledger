@@ -15,3 +15,4 @@ Initial public package preparation for `codex-run-ledger`.
 - Added documentation for the protocol, ChatGPT prompt helpers, execution enablement policy, runner plan, Git execution design, and local executor invocation design.
 - Added verification-only GitHub Actions CI for tests and package dry-run checks.
 - Added first-user quickstart guidance for installing, initializing, checking readiness, and reviewing completed runs.
+- Added a preparation-only release checklist for future tag, GitHub release, and npm publish decisions.

@@ -92,9 +92,14 @@ See these references for the deeper details:
 - `RUNNER_PLAN.md` for the local runner roadmap.
 - `GIT_EXECUTION_DESIGN.md` for Git safety design.
 - `LOCAL_EXECUTOR_INVOCATION_DESIGN.md` for Codex invocation design.
+- `RELEASE_CHECKLIST.md` for future tag, GitHub release, and npm publish preparation.
 
 For ChatGPT planning prompts that help propose bounded autonomous slices before an official prompt is approved, see `CHATGPT_PROMPT_HELPERS.md`.
 
 ## Repository CI
 
 The repository CI runs `npm test` and `npm pack --dry-run` for pull requests and pushes to `main`. It is intentionally verification-only: it does not publish to npm, create GitHub releases, push tags, or deploy anything.
+
+## Release Preparation
+
+Use `RELEASE_CHECKLIST.md` before any future public release or npm publish. The checklist is preparation-only; `v0.1.0` tagging, GitHub release creation, and npm publishing are separate actions that require explicit human approval.
