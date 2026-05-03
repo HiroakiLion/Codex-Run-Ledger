@@ -18,8 +18,10 @@ Install and initialize from the repository you want to manage:
 
 ```sh
 npm install --save-dev codex-run-ledger
-npx codex-run-ledger init --target-repo <repo-name>
+npx codex-run-ledger init --target-repo <owner/repo>
 ```
+
+For example, this repository would use `HiroakiLion/Codex-Run-Ledger`. This value is the target repository identifier that prompt frontmatter must match; it is not the npm package name.
 
 Add one approved prompt under `docs/codex-runs/`, then run the non-mutating checks:
 
@@ -60,7 +62,7 @@ npx codex-run-ledger review --slice-id <slice_id> --markdown
 Typical first pass:
 
 ```sh
-npx codex-run-ledger init --target-repo <repo-name>
+npx codex-run-ledger init --target-repo <owner/repo>
 npx codex-run-ledger detect
 npx codex-run-ledger dry-run --slice-id <slice_id>
 npx codex-run-ledger executor --slice-id <slice_id> --readiness-report

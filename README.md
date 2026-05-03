@@ -20,7 +20,7 @@ npm install --save-dev codex-run-ledger
 Initialize the ledger:
 
 ```sh
-npx codex-run-ledger init --target-repo your-repo-name
+npx codex-run-ledger init --target-repo HiroakiLion/Codex-Run-Ledger
 ```
 
 This creates:
@@ -34,12 +34,14 @@ The generated config starts like this:
 
 ```json
 {
-  "targetRepo": "your-repo-name",
+  "targetRepo": "HiroakiLion/Codex-Run-Ledger",
   "promptDir": "docs/codex-runs"
 }
 ```
 
 You can also copy `codex-run-ledger.config.example.json` manually if you prefer.
+
+Use the repository identifier for `targetRepo`, such as `owner/repo`. It is not the npm package name.
 
 ## Quick Start In An Existing Repo
 
@@ -47,7 +49,7 @@ From the repository you want to manage:
 
 ```sh
 npm install --save-dev codex-run-ledger
-npx codex-run-ledger init --target-repo your-repo-name
+npx codex-run-ledger init --target-repo HiroakiLion/Codex-Run-Ledger
 ```
 
 Create one approved `*-prompt.md` file under `docs/codex-runs/`, then inspect it before any execution:

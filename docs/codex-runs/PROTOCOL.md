@@ -40,7 +40,7 @@ codex_run_protocol: 1
 slice_id: YYYY-MM-DD-slice-NNN-short-name
 status: draft | approved | canceled
 owner: chatgpt-planner
-target_repo: your-repo-name
+target_repo: HiroakiLion/Codex-Run-Ledger
 target_branch: workbench
 result_file: docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-result.md
 created_at: ISO-8601 timestamp
@@ -53,7 +53,7 @@ Rules:
 - Codex may only run prompts with `status: approved`.
 - `approved_at` must be non-null when status is `approved`.
 - `approved_at` must be `null` when status is `draft` or `canceled`.
-- `target_repo` must be present and can be pinned with `targetRepo` in config.
+- `target_repo` must be present and can be pinned with `targetRepo` in config. Prefer a repository identifier such as `owner/repo`, not the npm package name.
 - `target_branch` must match configured branch policy.
 - `main` and `master` are forbidden by default.
 - `result_file` must equal the paired result path.
@@ -151,7 +151,7 @@ Default config shape:
 {
   "protocolVersion": 1,
   "promptDir": "docs/codex-runs",
-  "targetRepo": "your-repo-name",
+  "targetRepo": "HiroakiLion/Codex-Run-Ledger",
   "stableTargetBranches": ["workbench"],
   "sliceBranchPrefix": "codex/",
   "forbiddenTargetBranches": ["main", "master"],
