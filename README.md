@@ -1,6 +1,6 @@
 # Codex Run Ledger
 
-A simple Git-backed ledger for autonomous Codex work.
+A Git-backed prompt/result ledger for reliable, reviewable, and traceable autonomous Codex runs.
 
 It helps you make Codex runs more reliable, reviewable, and traceable:
 
@@ -9,7 +9,7 @@ It helps you make Codex runs more reliable, reviewable, and traceable:
 - keep one paired `*-result.md` file as the receipt;
 - review the prompt, result, verification, and diff before deciding what comes next.
 
-No database. No server. Just files in your repo.
+No database. No server. No hosted dependency. Just files in your repo.
 
 ## Install
 
@@ -137,9 +137,14 @@ If the result file already exists, the prompt is considered consumed and will no
 
 ## Docs
 
+- [Ledger protocol overview](docs/codex-runs/README.md)
 - [Protocol](docs/codex-runs/PROTOCOL.md)
 - [Prompt helpers](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md)
 - [Execution policy](docs/codex-runs/REAL_EXECUTION_ENABLEMENT_POLICY.md)
+- [Runner plan](docs/codex-runs/RUNNER_PLAN.md)
+- [Git execution design](docs/codex-runs/GIT_EXECUTION_DESIGN.md)
+- [Local executor invocation design](docs/codex-runs/LOCAL_EXECUTOR_INVOCATION_DESIGN.md)
+- [Changelog](CHANGELOG.md)
 
 ## Development
 

@@ -59,6 +59,13 @@ node scripts/codex-runs/review-summary-builder.mjs --slice-id <slice_id> --markd
 - Real Codex execution requires explicit flags and passing readiness gates.
 - Git mutation is preview-only in this version.
 
-See `PROTOCOL.md` for the full schema and `REAL_EXECUTION_ENABLEMENT_POLICY.md` for live execution gates.
+See these references for the deeper details:
+
+- `PROTOCOL.md` for prompt/result file rules.
+- `CHATGPT_PROMPT_HELPERS.md` for planning and prompt-writing helpers.
+- `REAL_EXECUTION_ENABLEMENT_POLICY.md` for live execution gates.
+- `RUNNER_PLAN.md` for the local runner roadmap.
+- `GIT_EXECUTION_DESIGN.md` for Git safety design.
+- `LOCAL_EXECUTOR_INVOCATION_DESIGN.md` for Codex invocation design.
 
 For ChatGPT planning prompts that help propose bounded autonomous slices before an official prompt is approved, see `CHATGPT_PROMPT_HELPERS.md`.
