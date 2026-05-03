@@ -12,6 +12,31 @@ docs/codex-runs/
 
 The path is configurable with `promptDir` in `codex-run-ledger.config.json`.
 
+## Existing Repo Quickstart
+
+Install and initialize from the repository you want to manage:
+
+```sh
+npm install --save-dev codex-run-ledger
+npx codex-run-ledger init --target-repo <repo-name>
+```
+
+Add one approved prompt under `docs/codex-runs/`, then run the non-mutating checks:
+
+```sh
+npx codex-run-ledger detect
+npx codex-run-ledger dry-run --slice-id <slice_id>
+npx codex-run-ledger executor --slice-id <slice_id> --readiness-report
+```
+
+Real Codex execution requires explicit opt-in flags after readiness passes. When Codex writes the paired `*-result.md`, the prompt is consumed and will not run again automatically.
+
+Build a review summary after a result or attempt artifact exists:
+
+```sh
+npx codex-run-ledger review --slice-id <slice_id> --markdown
+```
+
 ## Core Idea
 
 Each unit of work is represented by a prompt/result pair:

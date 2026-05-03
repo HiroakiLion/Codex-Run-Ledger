@@ -41,6 +41,31 @@ The generated config starts like this:
 
 You can also copy `codex-run-ledger.config.example.json` manually if you prefer.
 
+## Quick Start In An Existing Repo
+
+From the repository you want to manage:
+
+```sh
+npm install --save-dev codex-run-ledger
+npx codex-run-ledger init --target-repo your-repo-name
+```
+
+Create one approved `*-prompt.md` file under `docs/codex-runs/`, then inspect it before any execution:
+
+```sh
+npx codex-run-ledger detect
+npx codex-run-ledger dry-run --slice-id <slice_id>
+npx codex-run-ledger executor --slice-id <slice_id> --readiness-report
+```
+
+After Codex writes the paired `*-result.md`, build a review packet:
+
+```sh
+npx codex-run-ledger review --slice-id <slice_id> --markdown
+```
+
+Real Codex execution is gated behind explicit opt-in flags. A prompt is considered consumed once its paired result file exists.
+
 ## Basic Workflow
 
 1. Ask ChatGPT to propose the next Codex slices.
@@ -108,6 +133,14 @@ Short alias:
 
 ```sh
 npx crl detect
+```
+
+The alias works for the same subcommands:
+
+```sh
+npx crl dry-run --slice-id <slice_id>
+npx crl executor --slice-id <slice_id> --readiness-report
+npx crl review --slice-id <slice_id> --markdown
 ```
 
 ## File Layout
