@@ -1,6 +1,6 @@
 # ChatGPT Prompt Helpers
 
-These helper prompts are meant for the planning side of Codex Run Ledger. They help ChatGPT propose bounded autonomous slices before any official `*-prompt.md` file is created.
+These helper prompts are meant for the planning side of Codex Run Ledger: a Git-backed prompt/result ledger for reliable, reviewable, and traceable autonomous Codex runs. They help ChatGPT propose bounded autonomous slices before any official `*-prompt.md` file is created.
 
 The normal loop is:
 

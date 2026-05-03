@@ -20,6 +20,8 @@ This file demonstrates the required result format. It records fake/example resul
 
 Example result for a non-runnable prompt. No real work was performed.
 
+In real use, this paired result file is the durable receipt that marks the source prompt as consumed.
+
 ## Files Changed
 
 Example only:

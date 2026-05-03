@@ -1,7 +1,7 @@
 {
   "name": "codex-run-ledger",
   "version": "0.1.0",
-  "description": "A Git-backed prompt/result ledger for controlled Codex runs.",
+  "description": "A Git-backed prompt/result ledger for reliable, reviewable, and traceable autonomous Codex runs.",
   "type": "module",
   "main": "./scripts/codex-runs/cli.mjs",
   "exports": {
@@ -20,6 +20,7 @@
     "scripts/",
     "codex-run-ledger.config.example.json",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {

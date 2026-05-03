@@ -71,7 +71,7 @@ If this were a real approved prompt, Codex would write:
 
 `docs/codex-runs/0000-00-00-slice-000-example-result.md`
 
-Because this is an example, Codex must not execute it.
+Because this is an example, Codex must not execute it. In real use, the paired result file consumes the prompt so it will not run again automatically.
 
 ## Commit / Push Instructions
 
