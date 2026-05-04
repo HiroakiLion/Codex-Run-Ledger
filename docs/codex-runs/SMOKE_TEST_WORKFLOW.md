@@ -21,6 +21,14 @@ Expected result:
 
 Choose one path.
 
+Template command path:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id YYYY-MM-DD-slice-001-smoke-test
+```
+
+Then edit `docs/codex-runs/YYYY-MM-DD-slice-001-smoke-test-prompt.md`, fill in the body, set `status: approved`, and set `approved_at` after human approval.
+
 Manual path:
 
 1. Copy `FIRST_PROMPT_TEMPLATE.md`.
@@ -41,6 +49,7 @@ Expected result:
 
 - Exactly one non-example approved prompt exists.
 - The paired result file does not exist yet.
+- `prompt:new`, if used, created only the prompt file and did not run Codex.
 
 ## 3. Detect And Preview
 

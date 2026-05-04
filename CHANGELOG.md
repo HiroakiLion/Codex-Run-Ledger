@@ -11,6 +11,7 @@ This project uses semver-style version numbers, with human approval required bef
 - Added a first prompt template and documented the future `prompt:new` / `prompt:write` direction.
 - Added a smoke-test workflow for install, prompt creation, detect, dry-run, readiness, result, and review.
 - Polished review packet guidance and markdown headings for changed files, commands, and known risks.
+- Added a non-executing `prompt:new` helper for creating or printing draft prompt files with overwrite protection.
 
 ## 0.1.0 - 2026-05-04
 

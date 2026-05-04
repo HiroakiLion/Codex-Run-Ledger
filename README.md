@@ -66,6 +66,14 @@ Manual ledger workflow:
 4. Set `approved_at` to the approval timestamp.
 5. Run the ledger checks.
 
+Template command workflow:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id 2026-05-04-slice-001-example
+```
+
+This writes `docs/codex-runs/2026-05-04-slice-001-example-prompt.md` as a draft template. Review it, fill in the body, and set `status: approved` plus `approved_at` only after human approval. Use `--stdout` if you want to print the template instead of writing the file.
+
 Agent-assisted workflow:
 
 1. Paste the Codex-ready prompt into Codex.
@@ -133,6 +141,12 @@ Find approved prompts that are ready to run:
 
 ```sh
 npx codex-run-ledger detect
+```
+
+Create a starter prompt file:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id <slice_id>
 ```
 
 Preview what would happen:

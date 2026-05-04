@@ -35,6 +35,14 @@ Manual workflow:
 4. Set `approved_at` to the approval timestamp.
 5. Run `detect`, `dry-run`, and readiness checks.
 
+Template command workflow:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id <slice_id>
+```
+
+This writes a draft prompt file under the configured prompt directory and refuses to overwrite an existing prompt. Use `--stdout` to print the template instead of writing it. The command does not run Codex, commit, push, tag, release, deploy, or publish.
+
 Agent-assisted workflow:
 
 1. Paste the Codex-ready prompt into Codex.
@@ -79,6 +87,7 @@ The paired result file is written after execution regardless of how the prompt f
 ## Useful Commands
 
 ```sh
+npx codex-run-ledger prompt:new --slice-id <slice_id>
 npx codex-run-ledger detect --json
 npx codex-run-ledger dry-run --json
 npx codex-run-ledger executor --readiness-report

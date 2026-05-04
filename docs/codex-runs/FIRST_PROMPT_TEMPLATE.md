@@ -1,6 +1,18 @@
 # First Prompt Template
 
-Use this template when creating a first approved prompt file manually, or when asking Codex to create the file for you.
+Use this template when creating a first approved prompt file manually, when asking Codex to create the file for you, or when checking what `prompt:new` generates.
+
+The easiest local command is:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id YYYY-MM-DD-slice-NNN-short-name
+```
+
+That writes a draft prompt file under the configured prompt directory and refuses to overwrite existing files. To preview the template without writing:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id YYYY-MM-DD-slice-NNN-short-name --stdout
+```
 
 File path:
 
@@ -96,4 +108,4 @@ npx codex-run-ledger dry-run --slice-id YYYY-MM-DD-slice-NNN-short-name
 npx codex-run-ledger executor --slice-id YYYY-MM-DD-slice-NNN-short-name --readiness-report
 ```
 
-Future versions may add a `prompt:new` or `prompt:write` command to generate this structure. In this version, create the file manually or ask Codex to create it as an agent-assisted step.
+The `prompt:new` command creates or prints this structure only. It does not run Codex, commit, push, tag, release, deploy, or publish.
