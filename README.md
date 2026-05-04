@@ -36,9 +36,16 @@ The generated config starts like this:
 ```json
 {
   "targetRepo": "HiroakiLion/Codex-Run-Ledger",
-  "promptDir": "docs/codex-runs"
+  "promptDir": "docs/codex-runs",
+  "defaultVerificationCommands": [
+    "git diff --check"
+  ]
 }
 ```
+
+`prompt:new` uses `defaultVerificationCommands` to populate the generated prompt template. This keeps the package reusable across repos that do not define a `npm` test script.
+
+In a repo-specific setup, replace or extend this list in `codex-run-ledger.config.json` to match your local verification workflow (for example, `pnpm test`, `pytest`, `dotnet test`).
 
 You can also copy `codex-run-ledger.config.example.json` manually if you prefer.
 

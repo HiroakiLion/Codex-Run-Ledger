@@ -31,6 +31,9 @@ test("writes a draft prompt template under configured promptDir", () => {
     /Review handoff: run codex-run-ledger review --slice-id 2026-05-04-slice-003-template-command --markdown/
   );
   assert.match(content, /then run protocol checks using ledger\/REVIEW_PROTOCOL\.md/);
+  assert.match(content, /git diff --check/);
+  assert.doesNotMatch(content, /npm\.cmd test/);
+  assert.match(content, /replace or extend this list in `codex-run-ledger\.config\.json`/i);
 });
 
 test("stdout mode builds content without writing a prompt file", () => {
@@ -70,6 +73,38 @@ test("approved prompt includes approval timestamp", () => {
   assert.match(template.content, /approved_at: 2026-05-04T10:00:00\+09:00/);
 });
 
+test("default verification commands come from config", () => {
+  const rootDir = createFixture();
+
+  const template = buildPromptTemplate({
+    rootDir,
+    sliceId: "2026-05-04-slice-010-default-verification",
+    config: {
+      defaultVerificationCommands: ["node --check"]
+    }
+  });
+
+  assert.match(template.content, /- `node --check`/);
+  assert.doesNotMatch(template.content, /- `git diff --check`/);
+  assert.match(template.content, /replace or extend this list in `codex-run-ledger\.config\.json`/i);
+});
+
+test("configured verification commands can be repo-specific", () => {
+  const rootDir = createFixture({
+    defaultVerificationCommands: ["pnpm lint", "pnpm test", "git diff --check"]
+  });
+
+  const template = buildPromptTemplate({
+    rootDir,
+    sliceId: "2026-05-04-slice-011-custom-verification"
+  });
+
+  assert.match(template.content, /- `pnpm lint`/);
+  assert.match(template.content, /- `pnpm test`/);
+  assert.match(template.content, /- `git diff --check`/);
+  assert.doesNotMatch(template.content, /- `npm\.cmd test`/);
+});
+
 test("refuses to overwrite an existing prompt file", () => {
   const rootDir = createFixture();
   const sliceId = "2026-05-04-slice-007-no-overwrite";
@@ -99,24 +134,23 @@ test("json output is parseable", () => {
   assert.equal(payload.status, "draft");
 });
 
-function createFixture() {
+function createFixture(overrides = {}) {
   const rootDir = mkdtempSync(path.join(tmpdir(), "codex-run-ledger-prompt-template-"));
+  const config = {
+    protocolVersion: 1,
+    targetRepo: "HiroakiLion/Codex-Run-Ledger",
+    promptDir: "ledger",
+    stableTargetBranches: ["workbench"],
+    sliceBranchPrefix: "codex/",
+    forbiddenTargetBranches: ["main", "master"],
+    docsOnlyAllowedRoots: ["docs/codex-runs/"],
+    defaultVerificationCommands: ["git diff --check"],
+    ...overrides
+  };
 
   writeFileSync(
     path.join(rootDir, "codex-run-ledger.config.json"),
-    `${JSON.stringify(
-      {
-        protocolVersion: 1,
-        promptDir: "ledger",
-        targetRepo: "HiroakiLion/Codex-Run-Ledger",
-        stableTargetBranches: ["workbench"],
-        sliceBranchPrefix: "codex/",
-        forbiddenTargetBranches: ["main", "master"],
-        docsOnlyAllowedRoots: ["docs/codex-runs/"]
-      },
-      null,
-      2
-    )}\n`
+    `${JSON.stringify(config, null, 2)}\n`
   );
 
   return rootDir;

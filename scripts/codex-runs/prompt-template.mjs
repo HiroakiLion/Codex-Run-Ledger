@@ -49,6 +49,7 @@ export function buildPromptTemplate(options = {}) {
       targetBranch,
       resultFile,
       reviewProtocolFile,
+      verificationCommands: config.defaultVerificationCommands,
       createdAt,
       approvedAt
     })
@@ -156,10 +157,12 @@ function renderPromptTemplate({
   targetBranch,
   resultFile,
   reviewProtocolFile,
+  verificationCommands,
   createdAt,
   approvedAt
 }) {
   const promptFile = `${path.dirname(resultFile).split(path.sep).join("/")}/${sliceId}-prompt.md`;
+  const verificationSection = renderVerificationSection(verificationCommands);
 
   return `---\n` +
     `codex_run_protocol: 1\n` +
@@ -188,8 +191,7 @@ function renderPromptTemplate({
     `## Acceptance Criteria\n\n` +
     `- List the observable conditions that mean the slice is done.\n\n` +
     `## Verification Commands\n\n` +
-    `- \`npm.cmd test\`\n` +
-    `- \`git diff --check\`\n\n` +
+    `${verificationSection}\n\n` +
     `## Deployment / Runtime Checks\n\n` +
     `None.\n\n` +
     `## Risk Level\n\n` +
@@ -214,6 +216,16 @@ function renderPromptTemplate({
     `If you want a review packet, this command is required; then run protocol checks using ${reviewProtocolFile}.\`\n\n` +
     `## Commit / Push Instructions\n\n` +
     `Create focused subtask commits. Push only if explicitly approved.\n`;
+}
+
+function renderVerificationSection(verificationCommands) {
+  const commands = Array.isArray(verificationCommands) && verificationCommands.length > 0
+    ? verificationCommands
+    : ["git diff --check"];
+  const commandLines = commands.map((command) => `- \`${command}\``).join("\n");
+  const defaultCommandsLabel = `If your repo uses different checks, replace or extend this list in \`codex-run-ledger.config.json\` under \`defaultVerificationCommands\`.`;
+
+  return `${commandLines}\n\n${defaultCommandsLabel}`;
 }
 
 function parseCliArgs(args) {

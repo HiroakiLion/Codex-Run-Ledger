@@ -43,6 +43,20 @@ npx codex-run-ledger prompt:new --slice-id <slice_id>
 
 This writes a draft prompt file under the configured prompt directory and refuses to overwrite an existing prompt. Use `--stdout` to print the template instead of writing it. The command does not run Codex, commit, push, tag, release, deploy, or publish.
 
+By default, generated templates include:
+
+- `git diff --check`
+- the commands defined in `defaultVerificationCommands` from `codex-run-ledger.config.json`
+
+If your repository needs additional checks, edit `codex-run-ledger.config.json` after init:
+
+```json
+"defaultVerificationCommands": [
+  "git diff --check",
+  "pnpm test"
+]
+```
+
 Agent-assisted workflow:
 
 1. Paste the Codex-ready prompt into Codex.

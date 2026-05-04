@@ -2,6 +2,7 @@
   "protocolVersion": 1,
   "promptDir": "docs/codex-runs",
   "targetRepo": "HiroakiLion/Codex-Run-Ledger",
+  "defaultVerificationCommands": ["git diff --check"],
   "stableTargetBranches": ["workbench"],
   "sliceBranchPrefix": "codex/",
   "forbiddenTargetBranches": ["main", "master"],

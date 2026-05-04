@@ -5,6 +5,7 @@ export const defaultLedgerConfig = {
   protocolVersion: 1,
   promptDir: "docs/codex-runs",
   targetRepo: null,
+  defaultVerificationCommands: ["git diff --check"],
   stableTargetBranches: ["workbench"],
   sliceBranchPrefix: "codex/",
   forbiddenTargetBranches: ["main", "master"],
@@ -32,6 +33,10 @@ export function normalizeLedgerConfig(config = {}) {
     protocolVersion: 1,
     promptDir: normalizeDir(config.promptDir ?? defaultLedgerConfig.promptDir),
     targetRepo: config.targetRepo ? String(config.targetRepo) : null,
+    defaultVerificationCommands: normalizeStringList(
+      config.defaultVerificationCommands,
+      defaultLedgerConfig.defaultVerificationCommands
+    ),
     stableTargetBranches: normalizeStringList(
       config.stableTargetBranches,
       defaultLedgerConfig.stableTargetBranches

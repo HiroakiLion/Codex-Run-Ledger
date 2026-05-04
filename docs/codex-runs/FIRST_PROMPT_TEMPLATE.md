@@ -65,8 +65,9 @@ Describe what Codex may change.
 
 ## Verification Commands
 
-- `npm.cmd test`
 - `git diff --check`
+- Add or replace commands here based on the target repo’s verification setup (for example `npm test`, `pnpm test`, `pytest`, etc.).
+- Default reusable verification commands are also configurable via `codex-run-ledger.config.json` (`defaultVerificationCommands`), which `prompt:new` uses when no custom text is added.
 
 ## Deployment / Runtime Checks
 

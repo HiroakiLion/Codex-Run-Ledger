@@ -23,6 +23,7 @@ test("initializes config and prompt directory readme", () => {
     readFileSync(path.join(rootDir, "codex-run-ledger.config.json"), "utf8")
   );
   assert.equal(config.targetRepo, "sample-repo");
+  assert.deepEqual(config.defaultVerificationCommands, ["git diff --check"]);
 
   const readme = readFileSync(path.join(rootDir, "docs", "codex-runs", "README.md"), "utf8");
   assert.match(readme, /npx codex-run-ledger detect/);

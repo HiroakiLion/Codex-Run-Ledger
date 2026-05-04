@@ -6,7 +6,13 @@ This project uses semver-style version numbers, with human approval required bef
 
 ## Unreleased
 
-- Fixed git branch detection to continue with porcelain branch parsing when `git branch --show-current` fails, allowing environments with unsupported `--show-current` to avoid false branch-detection hard-fails.
+- None.
+
+## 0.2.8 - 2026-05-05
+
+- Removed the hardcoded `npm.cmd test` default from generated prompts to avoid assuming a root `npm test` script exists.
+- Added configurable `defaultVerificationCommands` in ledger config (and example config) so templates use safe defaults by default (`git diff --check`) and can be customized per repo.
+- Updated prompt template and starter template/docs so generated verification sections are cross-platform and clear about repo-specific command replacement.
 
 ## 0.2.6 - 2026-05-05
 
