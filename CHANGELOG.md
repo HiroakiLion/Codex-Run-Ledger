@@ -21,6 +21,10 @@ This project uses semver-style version numbers, with human approval required bef
 - Updated prompt templates so Codex final responses include the same review packet command.
 - Synchronized README and protocol docs to make “generate review packet + use REVIEW_PROTOCOL.md” the default end-of-slice flow.
 
+## 0.2.5 - 2026-05-05
+
+- Clarified the root README opening workflow to explicitly require review via `codex-run-ledger review --slice-id <slice_id> --markdown` and `REVIEW_PROTOCOL.md` before proceeding to the next slice.
+
 ## 0.2.2 - 2026-05-05
 
 - Fixed Windows real Codex execution by switching prompt transport from positional CLI argument to stdin (`-- -` in preview, `promptInput` as `input`).
