@@ -134,6 +134,26 @@ Every result should include:
 ## Commit / Branch Info
 ```
 
+## Review Packet
+
+After a result, attempt artifact, or verification artifact exists, reviewers can build a review packet with:
+
+```sh
+npx codex-run-ledger review --slice-id <slice_id> --markdown
+```
+
+The packet should make these items easy to scan:
+
+- prompt status and result status;
+- prompt, result, verification, and attempt artifact paths;
+- changed files;
+- commands run;
+- verification evidence;
+- known issues or risks;
+- recommended next action.
+
+The review packet is not a new approval step by itself. It is the evidence bundle used by ChatGPT or a human reviewer before deciding whether to retry, stop, or plan the next slice.
+
 ## Execution Rules
 
 - Do not run draft, canceled, malformed, or example prompts.

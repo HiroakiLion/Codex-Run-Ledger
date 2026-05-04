@@ -61,6 +61,8 @@ Build a review summary after a result or attempt artifact exists:
 npx codex-run-ledger review --slice-id <slice_id> --markdown
 ```
 
+The review summary is the handoff packet. It should surface prompt/result status, changed files, commands run, verification evidence, unresolved risks, and the recommended next action before anyone creates the next slice.
+
 ## Core Idea
 
 Each unit of work is represented by a prompt/result pair:
@@ -71,6 +73,8 @@ YYYY-MM-DD-slice-NNN-short-name-result.md
 ```
 
 The prompt is the approved instruction packet. The result is the durable receipt. A prompt with an existing paired result is considered consumed and must not be run again automatically.
+
+The paired result file is written after execution regardless of how the prompt file was created. Manual prompt creation and Codex-agent prompt creation both end in the same review flow: inspect the prompt, inspect the result, inspect verification evidence, then decide the next slice.
 
 ## Useful Commands
 

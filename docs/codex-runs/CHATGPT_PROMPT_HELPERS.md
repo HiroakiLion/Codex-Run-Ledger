@@ -104,5 +104,7 @@ Use this after a result file, attempt artifact, or verification artifact exists.
 ```text
 Review the completed Codex Run Ledger slice using the prompt, result file, verification artifact, attempt artifacts, repo diff, and test output.
 
-Lead with issues, risks, or mismatches between the prompt and result. Then summarize what changed, whether verification is sufficient, and recommend the next action.
+Lead with issues, risks, or mismatches between the prompt and result. Then summarize the prompt, result, changed files, commands run, verification evidence, unresolved risks, and recommended next action.
+
+Treat the paired result file as the durable receipt whether the prompt file was created manually or by Codex. Do not propose the next official prompt until the current slice evidence has been reviewed.
 ```

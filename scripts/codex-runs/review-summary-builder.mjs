@@ -161,7 +161,7 @@ export function renderReviewSummaryMarkdown(packet) {
     lines.push(`- Attempt artifact: ${attemptFile}`);
   }
 
-  appendListSection(lines, "Changed files", packet.changedFilesSummary);
+  appendListSection(lines, "Changed Files", packet.changedFilesSummary);
   lines.push("", "## Verification", "");
 
   if (packet.verificationSummary) {
@@ -187,8 +187,8 @@ export function renderReviewSummaryMarkdown(packet) {
     lines.push("- No attempt artifacts found.");
   }
 
-  appendListSection(lines, "Commands run", packet.commandsRunSummary);
-  appendListSection(lines, "Known issues / risks", packet.risksKnownIssues);
+  appendListSection(lines, "Commands Run", packet.commandsRunSummary);
+  appendListSection(lines, "Known Issues / Risks", packet.risksKnownIssues);
   lines.push(
     "",
     "## Recommended Next Action",
@@ -532,7 +532,7 @@ function appendListSection(lines, label, values) {
     return;
   }
 
-  lines.push("", `${label}:`, "");
+  lines.push("", `## ${label}`, "");
 
   for (const value of values) {
     lines.push(`- ${value}`);

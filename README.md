@@ -92,6 +92,8 @@ After Codex writes the paired `*-result.md`, build a review packet:
 npx codex-run-ledger review --slice-id <slice_id> --markdown
 ```
 
+The review packet gathers the prompt/result status, artifact paths, changed files, commands run, verification evidence, known risks, and recommended next action. Use it as the handoff back to ChatGPT or a human reviewer before planning the next slice.
+
 Real Codex execution is gated behind explicit opt-in flags. A prompt is considered consumed once its paired result file exists.
 
 ## Basic Workflow
@@ -160,6 +162,8 @@ Build a review summary:
 ```sh
 npx codex-run-ledger review --slice-id <slice_id> --markdown
 ```
+
+The markdown summary is meant to be pasted into a review conversation. It should make the prompt summary, result summary, verification evidence, changed files, unresolved risks, and suggested next slice easy to scan.
 
 Short alias:
 

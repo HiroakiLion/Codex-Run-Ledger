@@ -167,14 +167,18 @@ test("markdown output contains concise review sections", () => {
   const sliceId = "2026-05-02-slice-021-review-summary-packets";
 
   writePrompt(rootDir, sliceId, "approved");
+  writeResult(rootDir, sliceId, "completed");
   const markdown = renderReviewSummaryMarkdown(buildReviewSummaryPacket({ rootDir, sliceId }));
 
   for (const heading of [
     "## Status",
     "## Summary",
     "## Files",
+    "## Changed Files",
     "## Verification",
     "## Attempts",
+    "## Commands Run",
+    "## Known Issues / Risks",
     "## Recommended Next Action"
   ]) {
     assert.ok(markdown.includes(heading), `missing ${heading}`);
