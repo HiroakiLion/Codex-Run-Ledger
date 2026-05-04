@@ -8,6 +8,11 @@ This project uses semver-style version numbers, with human approval required bef
 
 - None.
 
+## 0.2.6 - 2026-05-05
+
+- Fixed Windows real Codex execution stdin transport by forwarding `promptInput` through the default `runCodexCommand` path into `executeCodexCommand`.
+- Added a regression check for the default runner hop so future fake-runner tests cannot miss stdin being dropped before `spawnSync`.
+
 ## 0.2.3 - 2026-05-05
 
 - Added a generic Codex Run Ledger review protocol for GPT/human review of completed runs.

@@ -310,7 +310,13 @@ export function invokeCodexForDocsOnlyPrompt(options = {}) {
       nodeExecPath: nodePreflight.processExecPath,
       prependNodePath: options.prependNodePath
     });
-  const runner = options.runner ?? runCodexCommand;
+  const runner =
+    options.runner ??
+    ((request = {}) =>
+      runCodexCommand({
+        ...request,
+        runner: options.processRunner ?? null
+      }));
   let result;
 
   try {
@@ -331,7 +337,7 @@ export function invokeCodexForDocsOnlyPrompt(options = {}) {
       invoked: false,
       exitCode: 1,
       stdout: "",
-      stderr: "Failed to launch Codex on this machine. Ensure the Codex CLI is installed and discoverable on PATH; on Windows, use codex.cmd/codex.exe/codex wrappers.",
+      stderr: `Failed to launch Codex on this machine. Ensure the Codex CLI is installed and discoverable on PATH; on Windows, use codex.cmd/codex.exe/codex wrappers. ${message}`,
       errorMessage: message,
       errorCode: "E_CLI_NOT_AVAILABLE"
     });
@@ -454,6 +460,7 @@ function runCodexCommand({
   args,
   cwd,
   env,
+  input,
   platform = process.platform,
   runner
 }) {
@@ -462,6 +469,7 @@ function runCodexCommand({
     args,
     cwd,
     env,
+    input,
     platform,
     runner: runner ?? null
   });

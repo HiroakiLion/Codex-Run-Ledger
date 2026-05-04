@@ -26,7 +26,11 @@ test("writes a draft prompt template under configured promptDir", () => {
   assert.match(content, /## Result File Instructions/);
   assert.match(content, /Review protocol: `ledger\/REVIEW_PROTOCOL\.md`/);
   assert.match(content, /## Final Response Requirement/);
-  assert.match(content, /Review handoff: use ledger\/REVIEW_PROTOCOL\.md/);
+  assert.match(
+    content,
+    /Review handoff: run codex-run-ledger review --slice-id 2026-05-04-slice-003-template-command --markdown/
+  );
+  assert.match(content, /then run protocol checks using ledger\/REVIEW_PROTOCOL\.md/);
 });
 
 test("stdout mode builds content without writing a prompt file", () => {

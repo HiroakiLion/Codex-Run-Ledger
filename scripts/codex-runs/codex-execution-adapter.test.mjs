@@ -223,6 +223,7 @@ test("invocation function uses injected fake runner in tests and never calls rea
 
 test("CLI available with fake runner passes", () => {
   const result = checkCodexCliAvailability({
+    platform: "linux",
     runner: ({ executable, args }) => {
       assert.equal(executable, "codex");
       assert.deepEqual(args, ["--version"]);
@@ -257,6 +258,7 @@ test("CLI missing with fake runner reports unavailable", () => {
 
 test("CLI check does not call codex exec", () => {
   const result = checkCodexCliAvailability({
+    platform: "linux",
     runner: ({ args }) => {
       assert.deepEqual(args, ["--version"]);
       assert.equal(args.includes("exec"), false);
@@ -288,9 +290,14 @@ test("CLI check probes cmd, exe, then binary on Windows-style platforms", () => 
     runner: ({ executable, args }) => {
       if (executable === "cmd" && Array.isArray(args)) {
         calls.push(args[2]);
+      } else {
+        calls.push([executable, ...(Array.isArray(args) ? args : [])].join(" "));
       }
 
-      if (typeof args?.[2] === "string" && args[2].startsWith("codex.cmd ")) {
+      if (
+        executable === "codex.cmd" ||
+        (typeof args?.[2] === "string" && args[2].includes("codex.cmd"))
+      ) {
         return {
           exitCode: 1,
           stdout: "",
@@ -300,7 +307,10 @@ test("CLI check probes cmd, exe, then binary on Windows-style platforms", () => 
         };
       }
 
-      if (typeof args?.[2] === "string" && args[2].startsWith("codex.exe ")) {
+      if (
+        executable === "codex.exe" ||
+        (typeof args?.[2] === "string" && args[2].includes("codex.exe"))
+      ) {
         return {
           exitCode: 1,
           stdout: "",
@@ -336,7 +346,7 @@ test("Windows wrapper path uses cmd /d /c for invocation", () => {
       execPath: "C:\\Program Files\\nodejs\\node.exe",
       version: "v22.0.0"
     }),
-    runner: ({ executable, args }) => {
+    processRunner: ({ executable, args }) => {
       calls.push({ executable, args });
 
       if (executable === "cmd") {
@@ -374,7 +384,7 @@ test("invocation passes promptInput through stdin to fake runner", () => {
       execPath: "C:\\Program Files\\nodejs\\node.exe",
       version: "v22.0.0"
     }),
-    runner: ({ input }) => {
+    processRunner: ({ input }) => {
       calls.push(input);
 
       return {
@@ -401,7 +411,7 @@ test("invocation returns actionable failure when all Windows candidates are unav
       execPath: "C:\\Program Files\\nodejs\\node.exe",
       version: "v22.0.0"
     }),
-    runner: () => ({
+    processRunner: () => ({
       exitCode: 1,
       stdout: "",
       stderr: "",
@@ -582,6 +592,22 @@ test("adapter source does not use shell true or shell-interpolated exec", () => 
   assert.equal(source.includes("exec("), false);
   assert.equal(source.includes("execSync("), false);
   assert.equal(source.includes("execFile("), false);
+});
+
+test("default Codex runner forwards prompt input to stdin spawn path", () => {
+  const source = readFileSync(
+    new URL("./codex-execution-adapter.mjs", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(
+    source,
+    /function runCodexCommand\(\{\s*executable,\s*args,\s*cwd,\s*env,\s*input,\s*platform/s
+  );
+  assert.match(
+    source,
+    /const result = executeCodexCommand\(\{\s*executable,\s*args,\s*cwd,\s*env,\s*input,\s*platform/s
+  );
 });
 
 test("JSON serialization is stable and parseable", () => {
