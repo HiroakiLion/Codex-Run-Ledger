@@ -7,7 +7,7 @@ It helps you make Codex runs more reliable, reviewable, and traceable:
 - write one approved `*-prompt.md` file for the work;
 - let Codex work from that prompt;
 - keep one paired `*-result.md` file as the receipt;
-- review the prompt, result, verification, and diff before deciding what comes next.
+- review the prompt, result, verification, and diff with `codex-run-ledger review --slice-id <slice_id> --markdown` and GPT using `docs/codex-runs/REVIEW_PROTOCOL.md` before deciding what comes next.
 
 No database. No server. No hosted dependency. Just files in your repo.
 
