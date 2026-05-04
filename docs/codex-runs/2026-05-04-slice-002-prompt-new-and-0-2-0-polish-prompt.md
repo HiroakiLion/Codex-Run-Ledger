@@ -4,7 +4,7 @@ slice_id: 2026-05-04-slice-002-prompt-new-and-0-2-0-polish
 status: approved
 owner: chatgpt-planner
 target_repo: HiroakiLion/Codex-Run-Ledger
-target_branch: codex/2026-05-04-slice-001-first-use-and-review-packets
+target_branch: codex/2026-05-04-slice-002-prompt-new-and-0-2-0-polish
 result_file: docs/codex-runs/2026-05-04-slice-002-prompt-new-and-0-2-0-polish-result.md
 created_at: 2026-05-04T10:00:00+09:00
 approved_at: 2026-05-04T10:00:00+09:00
