@@ -13,6 +13,8 @@ The normal loop is:
 
 The CLI currently works from saved prompt files. If you paste the prompt into Codex, Codex is responsible for creating the ledger file before running the checks.
 
+For a starter file shape, use `FIRST_PROMPT_TEMPLATE.md`.
+
 ## Propose Next Slices
 
 Use this when you are not sure what Codex should do next.

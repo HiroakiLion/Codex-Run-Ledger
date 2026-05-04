@@ -121,6 +121,8 @@ Do not write an official Codex Run Ledger prompt yet. First present the options 
 
 After choosing a slice, use [the parent-slice prompt helper](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md#write-a-codex-ready-parent-slice-prompt) to turn it into a Codex-ready prompt with subtask commits, safety constraints, verification, deploy/tag rules, and final report format.
 
+For a copy/paste file structure, use the [first prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md). This version does not include a `prompt:new` command yet; create the file manually or ask Codex to create it.
+
 ## Commands
 
 Find approved prompts that are ready to run:
@@ -201,6 +203,7 @@ If the result file already exists, the prompt is considered consumed and will no
 - [Ledger protocol overview](docs/codex-runs/README.md)
 - [Protocol](docs/codex-runs/PROTOCOL.md)
 - [Prompt helpers](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md)
+- [First prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md)
 - [Execution policy](docs/codex-runs/REAL_EXECUTION_ENABLEMENT_POLICY.md)
 - [Runner plan](docs/codex-runs/RUNNER_PLAN.md)
 - [Git execution design](docs/codex-runs/GIT_EXECUTION_DESIGN.md)

@@ -90,6 +90,8 @@ Every prompt should include:
 ## Commit / Push Instructions
 ```
 
+See `FIRST_PROMPT_TEMPLATE.md` for a copy/paste starter file.
+
 ## Result Frontmatter
 
 ```yaml
