@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defaultLedgerConfig, normalizeLedgerConfig } from "./config.mjs";
@@ -14,6 +14,7 @@ export function initCodexRunLedger(options = {}) {
   const configPath = path.join(rootDir, "codex-run-ledger.config.json");
   const promptDir = path.join(rootDir, config.promptDir);
   const promptReadmePath = path.join(promptDir, "README.md");
+  const reviewProtocolPath = path.join(promptDir, "REVIEW_PROTOCOL.md");
   const written = [];
   const skipped = [];
 
@@ -31,6 +32,13 @@ export function initCodexRunLedger(options = {}) {
   } else {
     writeFileSync(promptReadmePath, buildPromptDirReadme(config));
     written.push(path.relative(rootDir, promptReadmePath).split(path.sep).join("/"));
+  }
+
+  if (!options.force && existsSync(reviewProtocolPath)) {
+    skipped.push(`${config.promptDir}/REVIEW_PROTOCOL.md already exists`);
+  } else {
+    writeFileSync(reviewProtocolPath, loadReviewProtocolTemplate());
+    written.push(path.relative(rootDir, reviewProtocolPath).split(path.sep).join("/"));
   }
 
   return {
@@ -143,8 +151,27 @@ function buildPromptDirReadme(config) {
     `npx codex-run-ledger detect\n` +
     `npx codex-run-ledger dry-run --slice-id <slice_id>\n` +
     `npx codex-run-ledger executor --slice-id <slice_id> --readiness-report\n` +
+    `npx codex-run-ledger review --slice-id <slice_id> --markdown\n` +
     `\`\`\`\n\n` +
+    `For GPT review handoff, use \`REVIEW_PROTOCOL.md\` with the approved prompt, paired result file, final diff, commits, and verification evidence.\n\n` +
     `Configured target repo: \`${config.targetRepo}\`\n`;
+}
+
+function loadReviewProtocolTemplate() {
+  const protocolPath = path.resolve(
+    path.dirname(currentFile),
+    "..",
+    "..",
+    "docs",
+    "codex-runs",
+    "REVIEW_PROTOCOL.md"
+  );
+
+  if (existsSync(protocolPath)) {
+    return readFileSync(protocolPath, "utf8");
+  }
+
+  return "# Codex Run Ledger Review Protocol\n\nReview the approved prompt, paired result file, final diff, commits, and verification evidence.\n";
 }
 
 const currentFile = fileURLToPath(import.meta.url);

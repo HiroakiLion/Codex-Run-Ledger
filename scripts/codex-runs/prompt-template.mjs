@@ -14,6 +14,7 @@ export function buildPromptTemplate(options = {}) {
   const sliceId = normalizeSliceId(options.sliceId);
   const promptFile = `${config.promptDir}/${sliceId}-prompt.md`;
   const resultFile = `${config.promptDir}/${sliceId}-result.md`;
+  const reviewProtocolFile = `${config.promptDir}/REVIEW_PROTOCOL.md`;
   const status = normalizeStatus(options.status ?? "draft");
   const approvedAt = normalizeNullable(options.approvedAt);
   const createdAt = normalizeNullable(options.createdAt) ?? new Date().toISOString();
@@ -47,6 +48,7 @@ export function buildPromptTemplate(options = {}) {
       targetRepo,
       targetBranch,
       resultFile,
+      reviewProtocolFile,
       createdAt,
       approvedAt
     })
@@ -153,9 +155,12 @@ function renderPromptTemplate({
   targetRepo,
   targetBranch,
   resultFile,
+  reviewProtocolFile,
   createdAt,
   approvedAt
 }) {
+  const promptFile = `${path.dirname(resultFile).split(path.sep).join("/")}/${sliceId}-prompt.md`;
+
   return `---\n` +
     `codex_run_protocol: 1\n` +
     `slice_id: ${sliceId}\n` +
@@ -195,6 +200,17 @@ function renderPromptTemplate({
     `Write the paired result file:\n\n` +
     `\`${resultFile}\`\n\n` +
     `Do not overwrite an existing result file.\n\n` +
+    `The result file must include a \`Review Handoff\` section with:\n\n` +
+    `- Review protocol: \`${reviewProtocolFile}\`\n` +
+    `- Prompt file: \`${promptFile}\`\n` +
+    `- Result file: \`${resultFile}\`\n` +
+    `- Base ref used for review, if known\n` +
+    `- Head ref or final commit SHA, if known\n` +
+    `- Verification commands and outcomes\n` +
+    `- Skipped checks, deviations, risks, or unresolved issues\n\n` +
+    `## Final Response Requirement\n\n` +
+    `In the final chat response, include this one-line review handoff:\n\n` +
+    `\`Review handoff: use ${reviewProtocolFile} with this slice's prompt, result file, final diff, commits, and verification evidence.\`\n\n` +
     `## Commit / Push Instructions\n\n` +
     `Create focused subtask commits. Push only if explicitly approved.\n`;
 }

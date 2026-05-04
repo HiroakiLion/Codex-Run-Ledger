@@ -26,6 +26,7 @@ test("completed result with passing verification recommends ChatGPT review", () 
   assert.equal(packet.verificationSummary.passed, true);
   assert.equal(packet.recommendedNextAction, "ready_for_chatgpt_review");
   assert.equal(packet.runnableStatus, "completed");
+  assert.equal(packet.reviewProtocolFile, "docs/codex-runs/REVIEW_PROTOCOL.md");
 });
 
 test("result without verification artifact still produces packet with warning", () => {
@@ -183,6 +184,8 @@ test("markdown output contains concise review sections", () => {
   ]) {
     assert.ok(markdown.includes(heading), `missing ${heading}`);
   }
+
+  assert.ok(markdown.includes("- Review protocol: docs/codex-runs/REVIEW_PROTOCOL.md"));
 });
 
 test("write-review-summary writes once under docs codex-runs", () => {

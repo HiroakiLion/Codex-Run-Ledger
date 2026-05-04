@@ -13,7 +13,7 @@ The normal loop is:
 
 The CLI works from saved prompt files. `prompt:new` can create a starter file, but it does not run Codex. If you paste the prompt into Codex, Codex is responsible for creating the ledger file before running the checks.
 
-For a starter file shape, use `FIRST_PROMPT_TEMPLATE.md`.
+For a starter file shape, use `FIRST_PROMPT_TEMPLATE.md`. For completed-run reviews, use `REVIEW_PROTOCOL.md`.
 
 ## Propose Next Slices
 
@@ -81,6 +81,8 @@ Also include Codex Run Ledger requirements:
 - explicit Allowed Files / Areas
 - explicit Out of Scope
 - instruction not to overwrite existing result files
+- instruction that the result file must include a `Review Handoff` section pointing to `docs/codex-runs/REVIEW_PROTOCOL.md`, the prompt file, result file, final diff/commit range, verification evidence, skipped checks, deviations, and risks
+- instruction that the final Codex chat response must include a one-line review handoff pointing to the review protocol, prompt, result, final diff, commits, and verification evidence
 
 Do not broaden the scope beyond the approved option. Do not add deployment, tagging, schema changes, runtime mutation, or production actions unless they were explicitly approved for this slice.
 ```
@@ -95,6 +97,12 @@ Using the approved slice option, write a complete Codex Run Ledger `*-prompt.md`
 Keep it concise. Include required frontmatter, Objective, Scope, Out of Scope, Allowed Files / Areas, Required Changes, Acceptance Criteria, Verification Commands, Risk Level, Review Requirement, Result File Instructions, and Commit / Push Instructions.
 
 Keep Allowed Files / Areas explicit and narrow. Do not broaden the scope beyond the approved option.
+
+In Result File Instructions, require a `Review Handoff` section that points to `docs/codex-runs/REVIEW_PROTOCOL.md`, the prompt file, result file, final diff/commit range, verification evidence, skipped checks, deviations, and risks.
+
+In the final Codex chat response, require this one-line handoff:
+
+`Review handoff: use docs/codex-runs/REVIEW_PROTOCOL.md with this slice's prompt, result file, final diff, commits, and verification evidence.`
 ```
 
 ## Review A Completed Slice
@@ -102,9 +110,13 @@ Keep Allowed Files / Areas explicit and narrow. Do not broaden the scope beyond 
 Use this after a result file, attempt artifact, or verification artifact exists.
 
 ```text
+Use the Codex Run Ledger Review Protocol at `docs/codex-runs/REVIEW_PROTOCOL.md`.
+
 Review the completed Codex Run Ledger slice using the prompt, result file, verification artifact, attempt artifacts, repo diff, and test output.
 
-Lead with issues, risks, or mismatches between the prompt and result. Then summarize the prompt, result, changed files, commands run, verification evidence, unresolved risks, and recommended next action.
+Classify the run as approved, approved_with_notes, needs_fix, blocked, or unsafe_or_out_of_scope.
 
 Treat the paired result file as the durable receipt whether the prompt file was created manually or by Codex. Do not propose the next official prompt until the current slice evidence has been reviewed.
+
+Return the review Markdown only.
 ```

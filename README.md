@@ -28,6 +28,7 @@ This creates:
 ```text
 codex-run-ledger.config.json
 docs/codex-runs/README.md
+docs/codex-runs/REVIEW_PROTOCOL.md
 ```
 
 The generated config starts like this:
@@ -101,6 +102,8 @@ npx codex-run-ledger review --slice-id <slice_id> --markdown
 ```
 
 The review packet gathers the prompt/result status, artifact paths, changed files, commands run, verification evidence, known risks, and recommended next action. Use it as the handoff back to ChatGPT or a human reviewer before planning the next slice.
+
+For deeper review, use `docs/codex-runs/REVIEW_PROTOCOL.md` with the approved prompt, paired result file, final diff, commits, and verification evidence. New prompt templates also ask Codex to include a review handoff in the result file and final chat response.
 
 Real Codex execution is gated behind explicit opt-in flags. A prompt is considered consumed once its paired result file exists.
 
@@ -181,6 +184,8 @@ npx codex-run-ledger review --slice-id <slice_id> --markdown
 
 The markdown summary is meant to be pasted into a review conversation. It should make the prompt summary, result summary, verification evidence, changed files, unresolved risks, and suggested next slice easy to scan.
 
+For strict GPT review, pair the summary with `docs/codex-runs/REVIEW_PROTOCOL.md`.
+
 Short alias:
 
 ```sh
@@ -226,6 +231,7 @@ If the result file already exists, the prompt is considered consumed and will no
 - [Protocol](docs/codex-runs/PROTOCOL.md)
 - [Prompt helpers](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md)
 - [First prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md)
+- [Review protocol](docs/codex-runs/REVIEW_PROTOCOL.md)
 - [Smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md)
 - [Execution policy](docs/codex-runs/REAL_EXECUTION_ENABLEMENT_POLICY.md)
 - [Runner plan](docs/codex-runs/RUNNER_PLAN.md)

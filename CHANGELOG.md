@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 This project uses semver-style version numbers, with human approval required before any public npm publish, tag, or GitHub release.
 
+## Unreleased
+
+- Added a generic Codex Run Ledger review protocol for GPT/human review of completed runs.
+- Updated initialization to copy `REVIEW_PROTOCOL.md` into the configured ledger prompt directory.
+- Updated generated prompt templates, examples, prompt helpers, and review summaries to include review handoff guidance.
+
 ## 0.2.2 - 2026-05-05
 
 - Fixed Windows real Codex execution by switching prompt transport from positional CLI argument to stdin (`-- -` in preview, `promptInput` as `input`).

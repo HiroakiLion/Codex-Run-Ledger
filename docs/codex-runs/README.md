@@ -71,6 +71,8 @@ npx codex-run-ledger review --slice-id <slice_id> --markdown
 
 The review summary is the handoff packet. It should surface prompt/result status, changed files, commands run, verification evidence, unresolved risks, and the recommended next action before anyone creates the next slice.
 
+For GPT review, use `REVIEW_PROTOCOL.md` with the approved prompt, paired result file, final diff, commits, and verification evidence. New prompt templates ask Codex to include a `Review Handoff` section in the result file and a one-line review handoff in the final chat response so the protocol is discoverable even when the review starts from pasted output.
+
 ## Core Idea
 
 Each unit of work is represented by a prompt/result pair:
@@ -126,6 +128,7 @@ See these references for the deeper details:
 - `PROTOCOL.md` for prompt/result file rules.
 - `CHATGPT_PROMPT_HELPERS.md` for planning and prompt-writing helpers.
 - `FIRST_PROMPT_TEMPLATE.md` for a starter prompt file.
+- `REVIEW_PROTOCOL.md` for generic GPT review of completed runs.
 - `SMOKE_TEST_WORKFLOW.md` for a small end-to-end install and ledger test.
 - `REAL_EXECUTION_ENABLEMENT_POLICY.md` for live execution gates.
 - `RUNNER_PLAN.md` for the local runner roadmap.

@@ -14,7 +14,8 @@ test("initializes config and prompt directory readme", () => {
 
   assert.deepEqual(result.written, [
     "codex-run-ledger.config.json",
-    "docs/codex-runs/README.md"
+    "docs/codex-runs/README.md",
+    "docs/codex-runs/REVIEW_PROTOCOL.md"
   ]);
   assert.equal(result.config.targetRepo, "sample-repo");
 
@@ -25,6 +26,13 @@ test("initializes config and prompt directory readme", () => {
 
   const readme = readFileSync(path.join(rootDir, "docs", "codex-runs", "README.md"), "utf8");
   assert.match(readme, /npx codex-run-ledger detect/);
+  assert.match(readme, /REVIEW_PROTOCOL\.md/);
+
+  const protocol = readFileSync(
+    path.join(rootDir, "docs", "codex-runs", "REVIEW_PROTOCOL.md"),
+    "utf8"
+  );
+  assert.match(protocol, /Codex Run Ledger Review Protocol/);
 });
 
 test("does not overwrite existing files without force", () => {
@@ -38,7 +46,7 @@ test("does not overwrite existing files without force", () => {
 
   assert.equal(config.targetRepo, "first-repo");
   assert.equal(result.written.length, 0);
-  assert.equal(result.skipped.length, 2);
+  assert.equal(result.skipped.length, 3);
 });
 
 test("force overwrites generated files", () => {

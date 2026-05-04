@@ -79,6 +79,7 @@ export function buildReviewSummaryPacket(options = {}) {
   return {
     reviewSummaryVersion: 1,
     sliceId,
+    reviewProtocolFile: `${config.promptDir}/REVIEW_PROTOCOL.md`,
     promptFile,
     promptStatus,
     resultFile,
@@ -150,7 +151,8 @@ export function renderReviewSummaryMarkdown(packet) {
     "## Files",
     "",
     `- Prompt: ${packet.promptFile}`,
-    `- Result: ${packet.resultFile}${packet.resultExists ? "" : " (absent)"}`
+    `- Result: ${packet.resultFile}${packet.resultExists ? "" : " (absent)"}`,
+    `- Review protocol: ${packet.reviewProtocolFile}`
   );
 
   if (packet.verificationArtifactFile) {

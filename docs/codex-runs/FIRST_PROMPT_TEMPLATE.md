@@ -88,6 +88,22 @@ Write the paired result file:
 
 Do not overwrite an existing result file.
 
+The result file must include a `Review Handoff` section with:
+
+- Review protocol: `docs/codex-runs/REVIEW_PROTOCOL.md`
+- Prompt file: `docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-prompt.md`
+- Result file: `docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-result.md`
+- Base ref used for review, if known
+- Head ref or final commit SHA, if known
+- Verification commands and outcomes
+- Skipped checks, deviations, risks, or unresolved issues
+
+## Final Response Requirement
+
+In the final chat response, include this one-line review handoff:
+
+`Review handoff: use docs/codex-runs/REVIEW_PROTOCOL.md with this slice's prompt, result file, final diff, commits, and verification evidence.`
+
 ## Commit / Push Instructions
 
 Create focused subtask commits. Push only if explicitly approved.

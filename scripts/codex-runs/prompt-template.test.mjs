@@ -23,6 +23,10 @@ test("writes a draft prompt template under configured promptDir", () => {
   assert.match(content, /target_repo: HiroakiLion\/Codex-Run-Ledger/);
   assert.match(content, new RegExp(`target_branch: codex/${sliceId}`));
   assert.match(content, /approved_at: null/);
+  assert.match(content, /## Result File Instructions/);
+  assert.match(content, /Review protocol: `ledger\/REVIEW_PROTOCOL\.md`/);
+  assert.match(content, /## Final Response Requirement/);
+  assert.match(content, /Review handoff: use ledger\/REVIEW_PROTOCOL\.md/);
 });
 
 test("stdout mode builds content without writing a prompt file", () => {

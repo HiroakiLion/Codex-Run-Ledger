@@ -75,6 +75,19 @@ If this were a real approved prompt, Codex would write:
 
 Because this is an example, Codex must not execute it. In real use, the paired result file consumes the prompt so it will not run again automatically.
 
+The result file should include a `Review Handoff` section pointing to:
+
+- Review protocol: `docs/codex-runs/REVIEW_PROTOCOL.md`
+- Prompt file: `docs/codex-runs/0000-00-00-slice-000-example-prompt.md`
+- Result file: `docs/codex-runs/0000-00-00-slice-000-example-result.md`
+- Final diff, commits, verification evidence, skipped checks, deviations, and risks
+
+## Final Response Requirement
+
+In a real run, the final chat response should include:
+
+`Review handoff: use docs/codex-runs/REVIEW_PROTOCOL.md with this slice's prompt, result file, final diff, commits, and verification evidence.`
+
 ## Commit / Push Instructions
 
 Do not create a real branch, commit, or push from this example prompt.

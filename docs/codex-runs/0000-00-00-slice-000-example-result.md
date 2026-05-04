@@ -60,6 +60,17 @@ This is an example record and must not be interpreted as evidence of a real Code
 
 Example only: create a real prompt only after ChatGPT Reviewer discussion and user approval.
 
+## Review Handoff
+
+Use the Codex Run Ledger Review Protocol:
+
+- Protocol: `docs/codex-runs/REVIEW_PROTOCOL.md`
+- Prompt: `docs/codex-runs/0000-00-00-slice-000-example-prompt.md`
+- Result: `docs/codex-runs/0000-00-00-slice-000-example-result.md`
+- Base ref: `example-only`
+- Head ref: `example-only`
+- Review evidence: prompt, result, changed files, commits, and verification output
+
 ## Commit / Branch Info
 
 Example only:
