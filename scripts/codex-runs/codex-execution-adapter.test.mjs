@@ -6,6 +6,7 @@ import {
   buildCodexExecutionEnvironment,
   buildCodexExecutionAdapterResult,
   buildNodeAvailabilityPreflight,
+  buildCodexExecutableCandidates,
   checkCodexCliAvailability,
   invokeCodexForDocsOnlyPrompt
 } from "./codex-execution-adapter.mjs";
@@ -262,6 +263,122 @@ test("CLI check does not call codex exec", () => {
   });
 
   assert.equal(result.available, true);
+});
+
+test("builds Windows candidate command order for codex binary", () => {
+  assert.deepEqual(buildCodexExecutableCandidates("codex", { platform: "win32" }), [
+    "codex.cmd",
+    "codex.exe",
+    "codex"
+  ]);
+});
+
+test("CLI check probes cmd, exe, then binary on Windows-style platforms", () => {
+  const calls = [];
+
+  const result = checkCodexCliAvailability({
+    platform: "win32",
+    runner: ({ executable, args }) => {
+      if (executable === "cmd" && Array.isArray(args)) {
+        calls.push(args[2]);
+      }
+
+      if (typeof args?.[2] === "string" && args[2].startsWith("codex.cmd ")) {
+        return {
+          exitCode: 1,
+          stdout: "",
+          stderr: "",
+          errorMessage: "spawn codex.cmd ENOENT",
+          errorCode: "ENOENT"
+        };
+      }
+
+      if (typeof args?.[2] === "string" && args[2].startsWith("codex.exe ")) {
+        return {
+          exitCode: 1,
+          stdout: "",
+          stderr: "",
+          errorMessage: "spawn codex.exe ENOENT",
+          errorCode: "ENOENT"
+        };
+      }
+
+      return {
+        exitCode: 0,
+        stdout: "codex 1.2.3",
+        stderr: ""
+      };
+    }
+  });
+
+  assert.equal(result.available, true);
+  assert.deepEqual(calls[0], "codex.cmd --version");
+  assert.deepEqual(calls[1], "codex.exe --version");
+  assert.deepEqual(calls[2], "codex --version");
+});
+
+test("Windows wrapper path uses cmd /d /c for invocation", () => {
+  const calls = [];
+  const result = invokeCodexForDocsOnlyPrompt({
+    commandPreview: commandPreview(),
+    platform: "win32",
+    nodePreflight: buildNodeAvailabilityPreflight({
+      env: {
+        PATH: "C:\\tools\\bin"
+      },
+      execPath: "C:\\Program Files\\nodejs\\node.exe",
+      version: "v22.0.0"
+    }),
+    runner: ({ executable, args }) => {
+      calls.push({ executable, args });
+
+      if (executable === "cmd") {
+        return {
+          exitCode: 0,
+          stdout: "ok",
+          stderr: ""
+        };
+      }
+
+      return {
+        exitCode: 0,
+        stdout: "",
+        stderr: ""
+      };
+    }
+  });
+
+  assert.equal(result.exitCode, 0);
+  assert.deepEqual(calls[0].executable, "cmd");
+  assert.deepEqual(calls[0].args[0], "/d");
+  assert.deepEqual(calls[0].args[1], "/c");
+  assert.deepEqual(calls[0].args[2].startsWith("codex.cmd "), true);
+});
+
+test("invocation returns actionable failure when all Windows candidates are unavailable", () => {
+  const result = invokeCodexForDocsOnlyPrompt({
+    commandPreview: commandPreview(),
+    platform: "win32",
+    nodePreflight: buildNodeAvailabilityPreflight({
+      env: {
+        PATH: "C:\\tools\\bin"
+      },
+      execPath: "C:\\Program Files\\nodejs\\node.exe",
+      version: "v22.0.0"
+    }),
+    runner: () => ({
+      exitCode: 1,
+      stdout: "",
+      stderr: "",
+      errorMessage: "spawn ENOENT",
+      errorCode: "ENOENT"
+    })
+  });
+
+  assert.equal(result.invoked, false);
+  assert.equal(result.exitCode, 1);
+  assert.equal(result.errorCode, "E_CLI_NOT_AVAILABLE");
+  assert.match(result.stderr, /Windows: ensure one of codex\.cmd, codex\.exe, or codex is installed/);
 });
 
 test("adapter blocks execution if CLI unavailable", () => {

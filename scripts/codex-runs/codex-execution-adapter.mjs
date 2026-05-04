@@ -5,6 +5,19 @@ const outputPreviewLimit = 1000;
 const envPreviewLimit = 30;
 const pathPreviewLimit = 8;
 const secretNamePattern = /(SECRET|TOKEN|KEY|PASSWORD|PASS|AUTH|CREDENTIAL|COOKIE|SESSION)/i;
+const windowsExecutableCandidates = ["codex.cmd", "codex.exe", "codex"];
+const recoverableSpawnErrorCodes = new Set(["ENOENT", "ENOEXEC", "EACCES"]);
+const cmdWrapperExecutable = "cmd";
+
+export function buildCodexExecutableCandidates(executable, options = {}) {
+  const platform = options.platform ?? process.platform;
+
+  if (executable !== "codex") {
+    return [executable];
+  }
+
+  return platform === "win32" ? windowsExecutableCandidates : ["codex"];
+}
 
 export function evaluateCodexExecutionRequest(options = {}) {
   return buildCodexExecutionAdapterResult(options);
@@ -204,17 +217,27 @@ export function buildCodexExecutionEnvironment(options = {}) {
 export function checkCodexCliAvailability(options = {}) {
   const executable = "codex";
   const args = ["--version"];
-  const runner = options.runner ?? runCodexMetadataCommand;
+  const runner = options.runner;
   let result;
+  let resolvedExecutable = executable;
 
   try {
-    result = normalizeCliCheckRunnerResult(
-      runner({
-        executable,
-        args: [...args],
-        cwd: options.cwd
-      })
-    );
+    const metadataResult = runCodexMetadataCommand({
+      executable,
+      args: [...args],
+      cwd: options.cwd,
+      env: options.env,
+      platform: options.platform ?? process.platform,
+      runner
+    });
+    resolvedExecutable = metadataResult.resolvedExecutable;
+
+    result = normalizeCliCheckRunnerResult({
+      exitCode: metadataResult.exitCode,
+      stdout: metadataResult.stdout,
+      stderr: metadataResult.stderr,
+      errorMessage: metadataResult.errorMessage
+    });
   } catch (error) {
     result = normalizeCliCheckRunnerResult({
       exitCode: 1,
@@ -235,7 +258,7 @@ export function checkCodexCliAvailability(options = {}) {
     cliCheckVersion: 1,
     executable,
     available: errors.length === 0,
-    command: [executable, ...args],
+    command: [resolvedExecutable, ...args],
     exitCode: result.exitCode,
     stdoutPreview: truncateOutput(result.stdout),
     stderrPreview: truncateOutput(result.stderr),
@@ -288,13 +311,28 @@ export function invokeCodexForDocsOnlyPrompt(options = {}) {
       prependNodePath: options.prependNodePath
     });
   const runner = options.runner ?? runCodexCommand;
-  const result = runner({
-    executable: commandPreview.executable,
-    args: [...commandPreview.args],
-    cwd: commandPreview.cwd,
-    env: executionEnvironment.env,
-    executionEnvironmentPreview: executionEnvironment.envPreview
-  });
+  let result;
+
+  try {
+    result = runner({
+      executable: commandPreview.executable,
+      args: [...commandPreview.args],
+      cwd: commandPreview.cwd,
+      env: executionEnvironment.env,
+      executionEnvironmentPreview: executionEnvironment.envPreview,
+      platform: options.platform ?? process.platform
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return normalizeInvocationResult({
+      invoked: false,
+      exitCode: 1,
+      stdout: "",
+      stderr: "Failed to launch Codex on this machine. Ensure the Codex CLI is installed and discoverable on PATH; on Windows, use codex.cmd/codex.exe/codex wrappers.",
+      errorMessage: message,
+      errorCode: "E_CLI_NOT_AVAILABLE"
+    });
+  }
 
   return normalizeInvocationResult(result);
 }
@@ -377,34 +415,55 @@ function getGateBlockers(options) {
   return blockers;
 }
 
-function runCodexMetadataCommand({ executable, args, cwd }) {
-  const child = spawnSync(executable, args, {
+function runCodexMetadataCommand({
+  executable,
+  args,
+  cwd,
+  env,
+  platform = process.platform,
+  runner
+}) {
+  const result = executeCodexCommand({
+    executable,
+    args,
     cwd,
-    encoding: "utf8",
-    shell: false
+    env,
+    platform,
+    runner: runner ?? null
   });
 
   return {
-    exitCode: child.status ?? (child.error ? 1 : 0),
-    stdout: child.stdout ?? "",
-    stderr: child.stderr ?? "",
-    errorMessage: child.error?.message
+    exitCode: result.exitCode,
+    stdout: result.stdout,
+    stderr: result.stderr,
+    errorMessage: result.errorMessage,
+    resolvedExecutable: result.resolvedExecutable,
+    resolvedUsingCmdWrapper: result.resolvedUsingCmdWrapper
   };
 }
 
-function runCodexCommand({ executable, args, cwd, env }) {
-  const child = spawnSync(executable, args, {
+function runCodexCommand({
+  executable,
+  args,
+  cwd,
+  env,
+  platform = process.platform,
+  runner
+}) {
+  const result = executeCodexCommand({
+    executable,
+    args,
     cwd,
-    encoding: "utf8",
     env,
-    shell: false
+    platform,
+    runner: runner ?? null
   });
 
   return {
     invoked: true,
-    exitCode: child.status ?? (child.error ? 1 : 0),
-    stdout: child.stdout ?? "",
-    stderr: child.stderr ?? (child.error?.message ?? "")
+    exitCode: typeof result.exitCode === "number" ? result.exitCode : 0,
+    stdout: typeof result.stdout === "string" ? result.stdout : "",
+    stderr: typeof result.stderr === "string" ? result.stderr : ""
   };
 }
 
@@ -425,8 +484,176 @@ function normalizeInvocationResult(result = {}) {
     invoked: Boolean(result.invoked ?? true),
     exitCode: typeof result.exitCode === "number" ? result.exitCode : 0,
     stdout: typeof result.stdout === "string" ? result.stdout : "",
-    stderr: typeof result.stderr === "string" ? result.stderr : ""
+    stderr: typeof result.stderr === "string" ? result.stderr : "",
+    errorMessage: typeof result.errorMessage === "string" ? result.errorMessage : null,
+    errorCode: typeof result.errorCode === "string" ? result.errorCode : null
   };
+}
+
+function executeCodexCommand(options = {}) {
+  const executable = String(options.executable ?? "codex");
+  const args = Array.isArray(options.args) ? [...options.args] : [];
+  const cwd = options.cwd;
+  const env = options.env;
+  const platform = options.platform ?? process.platform;
+  const candidates = buildCodexExecutableCandidates(executable, { platform });
+  let lastAttempt = null;
+
+  for (const candidate of candidates) {
+    const attempt = spawnCodexExecutable({
+      executable: candidate,
+      args,
+      cwd,
+      env,
+      platform,
+      runner: options.runner
+    });
+    if (!isRecoverableSpawnFailure(attempt)) {
+      return {
+        ...attempt,
+        resolvedExecutable: candidate,
+        resolvedUsingCmdWrapper: isCmdWrapperExecutable(candidate)
+      };
+    }
+
+    lastAttempt = attempt;
+  }
+
+  throw new Error(buildCodexResolutionError({
+    executable,
+    platform,
+    candidates,
+    lastAttempt
+  }));
+}
+
+function spawnCodexExecutable({
+  executable,
+  args,
+  cwd,
+  env,
+  platform,
+  runner
+}) {
+  const launch = buildCodexSpawnSpec(executable, args);
+  const result = runSpawnSyncOrHook({
+    executable: launch.executable,
+    args: launch.args,
+    cwd,
+    env,
+    shell: launch.shell,
+    runner,
+    platform,
+    codexExecutable: executable
+  });
+
+  return result;
+}
+
+function buildCodexSpawnSpec(executable, args) {
+  if (!isCmdWrapperExecutable(executable)) {
+    return {
+      executable,
+      args: [...args],
+      shell: false
+    };
+  }
+
+  return {
+    executable: cmdWrapperExecutable,
+    args: ["/d", "/c", buildShellCommandLine([executable, ...args])],
+    shell: false
+  };
+}
+
+function runSpawnSyncOrHook({ executable, args, cwd, env, shell, runner }) {
+  if (typeof runner === "function") {
+    const result = runner({
+      executable,
+      args,
+      cwd,
+      env,
+      shell
+    });
+
+    return normalizeRunnerResult(result);
+  }
+
+  const child = spawnSync(executable, args, {
+    cwd,
+    encoding: "utf8",
+    env,
+    shell
+  });
+
+  return normalizeRunnerResult(child);
+}
+
+function normalizeRunnerResult(result = {}) {
+  const error = result.error;
+  const errorCode = typeof result.errorCode === "string"
+    ? result.errorCode
+    : typeof error?.code === "string"
+      ? error.code
+      : null;
+
+  return {
+    exitCode: typeof result.status === "number"
+      ? result.status
+      : typeof result.exitCode === "number"
+      ? result.exitCode
+      : error
+      ? 1
+      : 0,
+    stdout: typeof result.stdout === "string" ? result.stdout : "",
+    stderr: typeof result.stderr === "string" ? result.stderr : "",
+    errorMessage: typeof result.errorMessage === "string"
+      ? result.errorMessage
+      : typeof error?.message === "string"
+      ? error.message
+      : null,
+    errorCode
+  };
+}
+
+function isRecoverableSpawnFailure(result = {}) {
+  return (
+    typeof result.errorCode === "string" &&
+    recoverableSpawnErrorCodes.has(result.errorCode)
+  );
+}
+
+function buildCodexResolutionError({ executable, platform, candidates, lastAttempt }) {
+  const platformHint =
+    platform === "win32"
+      ? "Windows: ensure one of codex.cmd, codex.exe, or codex is installed and on PATH"
+      : "ensure `codex` is installed and on PATH";
+  const details = lastAttempt?.errorMessage ? ` (${lastAttempt.errorMessage})` : "";
+
+  return `Codex CLI was not runnable with ${executable}. Tried ${candidates.join(", ")}${details}. ${platformHint}.`;
+}
+
+function isCmdWrapperExecutable(value) {
+  return typeof value === "string" && /\.(cmd|bat)$/i.test(value);
+}
+
+function buildShellCommandLine(parts) {
+  return parts
+    .filter((part) => part !== undefined)
+    .map((part) => {
+      const value = String(part);
+
+      if (value.length === 0) {
+        return "\"\"";
+      }
+
+      if (/[ \t"]/g.test(value)) {
+        return `"${value.replace(/"/g, '\\"')}"`;
+      }
+
+      return value;
+    })
+    .join(" ");
 }
 
 function truncateOutput(value) {

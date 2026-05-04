@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project uses semver-style version numbers, with human approval required before any public npm publish, tag, or GitHub release.
 
+## 0.2.1 - 2026-05-04
+
+- Fixed real Codex command execution on Windows by probing `codex.cmd` -> `codex.exe` -> `codex` and invoking `.cmd/.bat` commands through `cmd /d /c`.
+- Added actionable recovery handling for spawn failures (`ENOENT`, `ENOEXEC`, `EACCES`) with clearer diagnostics when PATH or wrapper setup is wrong.
+- Added regression tests for Windows command resolution and command wrapper construction.
+- Kept command preview semantics and safety checks unchanged (`executable` remains `codex` in preview, non-invoking mode unchanged).
+- Backward compatibility unchanged for macOS/Linux command resolution and behavior.
+
 ## 0.2.0 - 2026-05-04
 
 - Clarified manual prompt-file creation versus Codex agent-assisted prompt-file creation.
