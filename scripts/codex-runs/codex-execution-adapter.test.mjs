@@ -87,6 +87,10 @@ test("all three flags with passing readiness and fake runner invokes fake runner
       assert.equal(executable, "codex");
       assert.equal(Array.isArray(args), true);
       assert.equal(cwd, "repo");
+      assert.equal(
+        args.slice(-2).join(" "),
+        "-- -"
+      );
 
       return {
         invoked: true,
@@ -195,10 +199,13 @@ test("invocation function rejects executable other than codex", () => {
 
 test("invocation function uses injected fake runner in tests and never calls real Codex", () => {
   let invoked = false;
+  const samplePromptInput = commandPreview().promptInput;
 
   const result = invokeCodexForDocsOnlyPrompt({
     commandPreview: commandPreview(),
-    runner: () => {
+    runner: ({ input }) => {
+      assert.equal(input, samplePromptInput);
+
       invoked = true;
 
       return {
@@ -355,6 +362,34 @@ test("Windows wrapper path uses cmd /d /c for invocation", () => {
   assert.deepEqual(calls[0].args[2].startsWith("codex.cmd "), true);
 });
 
+test("invocation passes promptInput through stdin to fake runner", () => {
+  const calls = [];
+  const result = invokeCodexForDocsOnlyPrompt({
+    commandPreview: commandPreview(),
+    platform: "win32",
+    nodePreflight: buildNodeAvailabilityPreflight({
+      env: {
+        PATH: "C:\\tools\\bin"
+      },
+      execPath: "C:\\Program Files\\nodejs\\node.exe",
+      version: "v22.0.0"
+    }),
+    runner: ({ input }) => {
+      calls.push(input);
+
+      return {
+        invoked: true,
+        exitCode: 0,
+        stdout: "ok",
+        stderr: ""
+      };
+    }
+  });
+
+  assert.equal(result.exitCode, 0);
+  assert.equal(calls[0], commandPreview().promptInput);
+});
+
 test("invocation returns actionable failure when all Windows candidates are unavailable", () => {
   const result = invokeCodexForDocsOnlyPrompt({
     commandPreview: commandPreview(),
@@ -475,6 +510,7 @@ test("controlled environment preview redacts secret values", () => {
 test("Codex invocation passes controlled env to injected fake runner", () => {
   const execPath = fakeNodeExecPath();
   let observedEnv = null;
+  let observedInput = null;
 
   const result = invokeCodexForDocsOnlyPrompt({
     commandPreview: commandPreview(),
@@ -490,8 +526,9 @@ test("Codex invocation passes controlled env to injected fake runner", () => {
       PATH: path.join(path.sep, "system", "bin"),
       OPENAI_API_KEY: "secret"
     },
-    runner: ({ env, executable }) => {
+    runner: ({ env, executable, input }) => {
       observedEnv = env;
+      observedInput = input;
       assert.equal(executable, "codex");
 
       return {
@@ -510,6 +547,7 @@ test("Codex invocation passes controlled env to injected fake runner", () => {
     observedEnv.PATH.startsWith(`${path.dirname(execPath)}${path.delimiter}`),
     true
   );
+  assert.equal(observedInput, commandPreview().promptInput);
 });
 
 test("adapter blocks execution if Node preflight fails", () => {
@@ -642,7 +680,9 @@ function plan() {
 function commandPreview() {
   return {
     executable: "codex",
-    args: ["exec", "--full-auto", "--", "Read prompt"],
+    args: ["exec", "--full-auto", "--", "-"],
+    promptInput:
+      "Read and follow the Codex prompt file at docs/codex-runs/example-prompt.md. Do not create any files outside the prompt scope. Write the paired result file required by the prompt.",
     cwd: "repo",
     promptFile: "docs/codex-runs/example-prompt.md",
     usesShell: false,

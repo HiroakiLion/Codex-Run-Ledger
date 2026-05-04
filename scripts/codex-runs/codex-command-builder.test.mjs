@@ -21,9 +21,15 @@ test("builds a safe command object for a valid prompt path", () => {
   assert.equal(Array.isArray(command.args), true);
   assert.equal(command.args.includes("exec"), true);
   assert.equal(command.args.includes("--"), true);
+  assert.equal(command.args[command.args.length - 1], "-");
+  assert.deepEqual(command.args.slice(-2), ["--", "-"]);
   assert.equal(command.usesShell, false);
   assert.equal(command.willExecute, false);
   assert.equal(command.promptFile, validPromptFile);
+  assert.equal(
+    command.promptInput,
+    "Read and follow the Codex prompt file at docs/codex-runs/2026-05-02-slice-001-test-run-prompt.md. Do not create any files outside the prompt scope. Write the paired result file required by the prompt."
+  );
 });
 
 test("rejects prompt path outside docs/codex-runs", () => {
@@ -126,6 +132,7 @@ test("JSON serialization is stable and parseable", () => {
 
   assert.equal(parsed.executable, "codex");
   assert.deepEqual(parsed.args, command.args);
+  assert.equal(parsed.promptInput, command.promptInput);
   assert.equal(parsed.usesShell, false);
   assert.equal(parsed.willExecute, false);
   assert.equal(parsed.promptFile, validPromptFile);

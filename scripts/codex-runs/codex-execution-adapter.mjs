@@ -314,12 +314,15 @@ export function invokeCodexForDocsOnlyPrompt(options = {}) {
   let result;
 
   try {
+    const promptInput = commandPreview.promptInput;
+
     result = runner({
       executable: commandPreview.executable,
       args: [...commandPreview.args],
       cwd: commandPreview.cwd,
       env: executionEnvironment.env,
       executionEnvironmentPreview: executionEnvironment.envPreview,
+      input: typeof promptInput === "string" ? promptInput : undefined,
       platform: options.platform ?? process.platform
     });
   } catch (error) {
@@ -358,6 +361,10 @@ export function validateCodexExecutionCommandPreview(command = {}) {
 
   if (!command.cwd) {
     errors.push("cwd must be present");
+  }
+
+  if (typeof command.promptInput !== "string" || command.promptInput.length === 0) {
+    errors.push("promptInput must be present");
   }
 
   return {
@@ -496,6 +503,7 @@ function executeCodexCommand(options = {}) {
   const cwd = options.cwd;
   const env = options.env;
   const platform = options.platform ?? process.platform;
+  const input = options.input;
   const candidates = buildCodexExecutableCandidates(executable, { platform });
   let lastAttempt = null;
 
@@ -506,6 +514,7 @@ function executeCodexCommand(options = {}) {
       cwd,
       env,
       platform,
+      input,
       runner: options.runner
     });
     if (!isRecoverableSpawnFailure(attempt)) {
@@ -533,6 +542,7 @@ function spawnCodexExecutable({
   cwd,
   env,
   platform,
+  input,
   runner
 }) {
   const launch = buildCodexSpawnSpec(executable, args);
@@ -542,6 +552,7 @@ function spawnCodexExecutable({
     cwd,
     env,
     shell: launch.shell,
+    input,
     runner,
     platform,
     codexExecutable: executable
@@ -566,14 +577,15 @@ function buildCodexSpawnSpec(executable, args) {
   };
 }
 
-function runSpawnSyncOrHook({ executable, args, cwd, env, shell, runner }) {
+function runSpawnSyncOrHook({ executable, args, cwd, env, shell, input, runner }) {
   if (typeof runner === "function") {
     const result = runner({
       executable,
       args,
       cwd,
       env,
-      shell
+      shell,
+      input
     });
 
     return normalizeRunnerResult(result);
@@ -583,7 +595,8 @@ function runSpawnSyncOrHook({ executable, args, cwd, env, shell, runner }) {
     cwd,
     encoding: "utf8",
     env,
-    shell
+    shell,
+    input
   });
 
   return normalizeRunnerResult(child);

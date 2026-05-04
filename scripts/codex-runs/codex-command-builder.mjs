@@ -10,6 +10,7 @@ export function buildCodexInvocationCommand(options = {}) {
     config: options.config
   });
   const promptFile = normalizePromptPath(options.promptFile);
+  const promptInput = `Read and follow the Codex prompt file at ${promptFile}. Do not create any files outside the prompt scope. Write the paired result file required by the prompt.`;
   const cwd = options.cwd ?? options.repoRoot;
   const mode = options.mode ?? "exec";
   const extraArgs = Array.isArray(options.extraArgs) ? options.extraArgs : [];
@@ -20,10 +21,11 @@ export function buildCodexInvocationCommand(options = {}) {
       "--full-auto",
       ...extraArgs,
       "--",
-      `Read and follow the Codex prompt file at ${promptFile}. Do not create any files outside the prompt scope. Write the paired result file required by the prompt.`
+      "-"
     ],
     cwd,
     promptFile,
+    promptInput,
     usesShell: false,
     willExecute: false
   };
@@ -68,6 +70,10 @@ export function validateCodexInvocationCommand(command = {}, options = {}) {
 
   if (command.willExecute !== false) {
     errors.push("willExecute must be false");
+  }
+
+  if (typeof command.promptInput !== "string" || command.promptInput.length === 0) {
+    errors.push("promptInput must be present");
   }
 
   return {
