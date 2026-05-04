@@ -113,6 +113,7 @@ See these references for the deeper details:
 - `PROTOCOL.md` for prompt/result file rules.
 - `CHATGPT_PROMPT_HELPERS.md` for planning and prompt-writing helpers.
 - `FIRST_PROMPT_TEMPLATE.md` for a starter prompt file.
+- `SMOKE_TEST_WORKFLOW.md` for a small end-to-end install and ledger test.
 - `REAL_EXECUTION_ENABLEMENT_POLICY.md` for live execution gates.
 - `RUNNER_PLAN.md` for the local runner roadmap.
 - `GIT_EXECUTION_DESIGN.md` for Git safety design.
@@ -122,6 +123,8 @@ See these references for the deeper details:
 For ChatGPT planning prompts that help propose bounded autonomous slices before an official prompt is approved, see `CHATGPT_PROMPT_HELPERS.md`.
 
 For a copy/paste prompt-file structure, see `FIRST_PROMPT_TEMPLATE.md`.
+
+For a first install test in another repository, see `SMOKE_TEST_WORKFLOW.md`.
 
 ## Repository CI
 

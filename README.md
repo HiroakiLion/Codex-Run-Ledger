@@ -123,6 +123,8 @@ After choosing a slice, use [the parent-slice prompt helper](docs/codex-runs/CHA
 
 For a copy/paste file structure, use the [first prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md). This version does not include a `prompt:new` command yet; create the file manually or ask Codex to create it.
 
+To test the full lifecycle in a small target repo, follow the [smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md).
+
 ## Commands
 
 Find approved prompts that are ready to run:
@@ -204,6 +206,7 @@ If the result file already exists, the prompt is considered consumed and will no
 - [Protocol](docs/codex-runs/PROTOCOL.md)
 - [Prompt helpers](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md)
 - [First prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md)
+- [Smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md)
 - [Execution policy](docs/codex-runs/REAL_EXECUTION_ENABLEMENT_POLICY.md)
 - [Runner plan](docs/codex-runs/RUNNER_PLAN.md)
 - [Git execution design](docs/codex-runs/GIT_EXECUTION_DESIGN.md)

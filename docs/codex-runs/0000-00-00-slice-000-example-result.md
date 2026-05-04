@@ -16,6 +16,8 @@ EXAMPLE ONLY.
 
 This file demonstrates the required result format. It records fake/example results only.
 
+For a full smoke-test sequence, see `SMOKE_TEST_WORKFLOW.md`.
+
 ## Summary
 
 Example result for a non-runnable prompt. No real work was performed.
