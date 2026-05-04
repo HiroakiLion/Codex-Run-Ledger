@@ -6,7 +6,7 @@ This project uses semver-style version numbers, with human approval required bef
 
 ## Unreleased
 
-- None.
+- Fixed git branch detection to continue with porcelain branch parsing when `git branch --show-current` fails, allowing environments with unsupported `--show-current` to avoid false branch-detection hard-fails.
 
 ## 0.2.6 - 2026-05-05
 

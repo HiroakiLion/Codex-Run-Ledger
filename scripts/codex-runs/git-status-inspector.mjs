@@ -12,6 +12,9 @@ export function inspectGitStatus(options = {}) {
   const cwd = path.resolve(options.cwd ?? options.repoRoot ?? process.cwd());
   const targetBranch = options.targetBranch ?? null;
   const sliceId = options.sliceId ?? null;
+  const runReadOnlyGitCommand = typeof options.runGit === "function"
+    ? options.runGit
+    : runReadOnlyGit;
   const config = loadLedgerConfig({
     rootDir: cwd,
     configPath: options.configPath,
@@ -20,8 +23,8 @@ export function inspectGitStatus(options = {}) {
   const errors = [];
   const warnings = [];
 
-  const branchResult = runReadOnlyGit(["branch", "--show-current"], cwd);
-  const statusResult = runReadOnlyGit(["status", "--porcelain=v1", "--branch"], cwd);
+  const branchResult = runReadOnlyGitCommand(["branch", "--show-current"], cwd);
+  const statusResult = runReadOnlyGitCommand(["status", "--porcelain=v1", "--branch"], cwd);
 
   if (!branchResult.ok) {
     warnings.push(branchResult.message);
@@ -31,6 +34,12 @@ export function inspectGitStatus(options = {}) {
     warnings.push(statusResult.message);
   }
 
+  if (!branchResult.ok && !statusResult.ok) {
+    warnings.push(
+      "Branch detection failed: both `git branch --show-current` and `git status --porcelain=v1 --branch` failed."
+    );
+  }
+
   const parsed = statusResult.ok
     ? parsePorcelainBranchStatus(statusResult.stdout)
     : {
@@ -38,9 +47,15 @@ export function inspectGitStatus(options = {}) {
         dirtyPaths: [],
         isDirty: false
       };
-  const currentBranch = branchResult.ok && branchResult.stdout.trim()
-    ? branchResult.stdout.trim()
-    : parsed.currentBranch;
+  const branchFromShowCurrent = branchResult.ok ? branchResult.stdout.trim() : "";
+  const currentBranch = branchFromShowCurrent || parsed.currentBranch;
+
+  if (!branchFromShowCurrent && statusResult.ok && parsed.currentBranch) {
+    warnings.push(
+      "Branch detection fallback used: `git status --porcelain=v1 --branch` provided the branch name."
+    );
+  }
+
   const branchValidation = currentBranch
     ? validateCurrentBranchAgainstTarget({
         currentBranch,
@@ -165,6 +180,16 @@ function parseBranchName(branchLine) {
   }
 
   const raw = branchLine.slice(3).trim();
+  const onBranchMatch = raw.match(/^on branch\s+(.+)$/i);
+  const noCommitsMatch = raw.match(/^no commits yet on\s+(.+)$/i);
+
+  if (onBranchMatch) {
+    return onBranchMatch[1].trim();
+  }
+
+  if (noCommitsMatch) {
+    return noCommitsMatch[1].trim();
+  }
 
   if (raw.startsWith("HEAD ")) {
     return raw;
