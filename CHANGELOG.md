@@ -6,9 +6,14 @@ This project uses semver-style version numbers, with human approval required bef
 
 ## Unreleased
 
+- None.
+
+## 0.2.3 - 2026-05-05
+
 - Added a generic Codex Run Ledger review protocol for GPT/human review of completed runs.
 - Updated initialization to copy `REVIEW_PROTOCOL.md` into the configured ledger prompt directory.
 - Updated generated prompt templates, examples, prompt helpers, and review summaries to include review handoff guidance.
+- Added explicit final report requirements that include review protocol file path and review handoff instructions.
 
 ## 0.2.2 - 2026-05-05
 
