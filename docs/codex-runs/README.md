@@ -23,6 +23,36 @@ npx codex-run-ledger init --target-repo <owner/repo>
 
 For example, this repository would use `HiroakiLion/Codex-Run-Ledger`. This value is the target repository identifier that prompt frontmatter must match; it is not the npm package name.
 
+## How Prompt Files Are Created
+
+The ledger starts from saved files. `codex-run-ledger` detects and checks existing `*-prompt.md` files; it does not yet convert pasted chat text into a prompt file by itself.
+
+Manual workflow:
+
+1. Create `docs/codex-runs/<slice-id>-prompt.md`.
+2. Paste the Codex-ready prompt.
+3. Set `status: approved`.
+4. Set `approved_at` to the approval timestamp.
+5. Run `detect`, `dry-run`, and readiness checks.
+
+Template command workflow:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id <slice_id>
+```
+
+This writes a draft prompt file under the configured prompt directory and refuses to overwrite an existing prompt. Use `--stdout` to print the template instead of writing it. The command does not run Codex, commit, push, tag, release, deploy, or publish.
+
+Agent-assisted workflow:
+
+1. Paste the Codex-ready prompt into Codex.
+2. Ask Codex to create the approved `docs/codex-runs/<slice-id>-prompt.md` file.
+3. Ask Codex to run the ledger checks.
+4. Ask Codex to execute the bounded slice.
+5. Ask Codex to write the paired result file.
+
+In all workflows, the saved prompt file is the durable instruction packet and the paired result file is the durable receipt.
+
 Add one approved prompt under `docs/codex-runs/`, then run the non-mutating checks:
 
 ```sh
@@ -39,6 +69,8 @@ Build a review summary after a result or attempt artifact exists:
 npx codex-run-ledger review --slice-id <slice_id> --markdown
 ```
 
+The review summary is the handoff packet. It should surface prompt/result status, changed files, commands run, verification evidence, unresolved risks, and the recommended next action before anyone creates the next slice.
+
 ## Core Idea
 
 Each unit of work is represented by a prompt/result pair:
@@ -50,9 +82,12 @@ YYYY-MM-DD-slice-NNN-short-name-result.md
 
 The prompt is the approved instruction packet. The result is the durable receipt. A prompt with an existing paired result is considered consumed and must not be run again automatically.
 
+The paired result file is written after execution regardless of how the prompt file was created. Manual prompt creation and Codex-agent prompt creation both end in the same review flow: inspect the prompt, inspect the result, inspect verification evidence, then decide the next slice.
+
 ## Useful Commands
 
 ```sh
+npx codex-run-ledger prompt:new --slice-id <slice_id>
 npx codex-run-ledger detect --json
 npx codex-run-ledger dry-run --json
 npx codex-run-ledger executor --readiness-report
@@ -90,6 +125,8 @@ See these references for the deeper details:
 
 - `PROTOCOL.md` for prompt/result file rules.
 - `CHATGPT_PROMPT_HELPERS.md` for planning and prompt-writing helpers.
+- `FIRST_PROMPT_TEMPLATE.md` for a starter prompt file.
+- `SMOKE_TEST_WORKFLOW.md` for a small end-to-end install and ledger test.
 - `REAL_EXECUTION_ENABLEMENT_POLICY.md` for live execution gates.
 - `RUNNER_PLAN.md` for the local runner roadmap.
 - `GIT_EXECUTION_DESIGN.md` for Git safety design.
@@ -98,10 +135,14 @@ See these references for the deeper details:
 
 For ChatGPT planning prompts that help propose bounded autonomous slices before an official prompt is approved, see `CHATGPT_PROMPT_HELPERS.md`.
 
+For a copy/paste prompt-file structure, see `FIRST_PROMPT_TEMPLATE.md`.
+
+For a first install test in another repository, see `SMOKE_TEST_WORKFLOW.md`.
+
 ## Repository CI
 
 The repository CI runs `npm test` and `npm pack --dry-run` for pull requests and pushes to `main`. It is intentionally verification-only: it does not publish to npm, create GitHub releases, push tags, or deploy anything.
 
 ## Release Preparation
 
-Use `RELEASE_CHECKLIST.md` before any future public release or npm publish. The checklist is preparation-only; `v0.1.0` tagging, GitHub release creation, and npm publishing are separate actions that require explicit human approval.
+Use `RELEASE_CHECKLIST.md` before any future public release or npm publish. The checklist is preparation-only; version bumps, tags, GitHub releases, and npm publishing are separate actions that require explicit human approval.

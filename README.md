@@ -52,7 +52,41 @@ npm install --save-dev codex-run-ledger
 npx codex-run-ledger init --target-repo HiroakiLion/Codex-Run-Ledger
 ```
 
-Create one approved `*-prompt.md` file under `docs/codex-runs/`, then inspect it before any execution:
+## How Prompts Get Into The Ledger
+
+`codex-run-ledger` works from prompt files that already exist under `docs/codex-runs/`. It detects, validates, previews, and reviews those files; it does not yet turn pasted chat text into a prompt file by itself.
+
+You have three practical ways to create the prompt file.
+
+Manual ledger workflow:
+
+1. Create `docs/codex-runs/<slice-id>-prompt.md`.
+2. Paste the Codex-ready prompt into that file.
+3. Set `status: approved`.
+4. Set `approved_at` to the approval timestamp.
+5. Run the ledger checks.
+
+Template command workflow:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id 2026-05-04-slice-001-example
+```
+
+This writes `docs/codex-runs/2026-05-04-slice-001-example-prompt.md` as a draft template. Review it, fill in the body, and set `status: approved` plus `approved_at` only after human approval. Use `--stdout` if you want to print the template instead of writing the file.
+
+Agent-assisted workflow:
+
+1. Paste the Codex-ready prompt into Codex.
+2. Ask Codex to create the approved `docs/codex-runs/<slice-id>-prompt.md` file.
+3. Ask Codex to run the ledger checks.
+4. Ask Codex to execute the bounded slice.
+5. Ask Codex to write the paired `docs/codex-runs/<slice-id>-result.md` file.
+
+In the agent-assisted path, Codex is creating the file for you because it can edit the repository. The package still treats the saved prompt file as the source of truth.
+
+## First Five Minutes
+
+Create or ask Codex to create one approved `*-prompt.md` file under `docs/codex-runs/`, then inspect it before any execution:
 
 ```sh
 npx codex-run-ledger detect
@@ -66,13 +100,15 @@ After Codex writes the paired `*-result.md`, build a review packet:
 npx codex-run-ledger review --slice-id <slice_id> --markdown
 ```
 
+The review packet gathers the prompt/result status, artifact paths, changed files, commands run, verification evidence, known risks, and recommended next action. Use it as the handoff back to ChatGPT or a human reviewer before planning the next slice.
+
 Real Codex execution is gated behind explicit opt-in flags. A prompt is considered consumed once its paired result file exists.
 
 ## Basic Workflow
 
 1. Ask ChatGPT to propose the next Codex slices.
 2. Pick one slice.
-3. Save it as an approved prompt under `docs/codex-runs/`.
+3. Save it as an approved prompt under `docs/codex-runs/`, either manually or by asking Codex to create the file.
 4. Run the ledger checks.
 5. Let Codex execute only when the readiness report is clean.
 6. Review the result before creating the next prompt.
@@ -95,12 +131,24 @@ Do not write an official Codex Run Ledger prompt yet. First present the options 
 
 After choosing a slice, use [the parent-slice prompt helper](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md#write-a-codex-ready-parent-slice-prompt) to turn it into a Codex-ready prompt with subtask commits, safety constraints, verification, deploy/tag rules, and final report format.
 
+For a copy/paste file structure, use the [first prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md), or generate a draft with `npx codex-run-ledger prompt:new --slice-id <slice_id>`.
+
+To test the full lifecycle in a small target repo, follow the [smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md).
+
+Local version bumps in this repository are preparation only. Publishing to npm, creating a Git tag, and creating a GitHub release require separate human approval.
+
 ## Commands
 
 Find approved prompts that are ready to run:
 
 ```sh
 npx codex-run-ledger detect
+```
+
+Create a starter prompt file:
+
+```sh
+npx codex-run-ledger prompt:new --slice-id <slice_id>
 ```
 
 Preview what would happen:
@@ -130,6 +178,8 @@ Build a review summary:
 ```sh
 npx codex-run-ledger review --slice-id <slice_id> --markdown
 ```
+
+The markdown summary is meant to be pasted into a review conversation. It should make the prompt summary, result summary, verification evidence, changed files, unresolved risks, and suggested next slice easy to scan.
 
 Short alias:
 
@@ -175,6 +225,8 @@ If the result file already exists, the prompt is considered consumed and will no
 - [Ledger protocol overview](docs/codex-runs/README.md)
 - [Protocol](docs/codex-runs/PROTOCOL.md)
 - [Prompt helpers](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md)
+- [First prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md)
+- [Smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md)
 - [Execution policy](docs/codex-runs/REAL_EXECUTION_ENABLEMENT_POLICY.md)
 - [Runner plan](docs/codex-runs/RUNNER_PLAN.md)
 - [Git execution design](docs/codex-runs/GIT_EXECUTION_DESIGN.md)

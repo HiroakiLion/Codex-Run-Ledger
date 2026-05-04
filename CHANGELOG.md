@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 This project uses semver-style version numbers, with human approval required before any public npm publish, tag, or GitHub release.
 
+## 0.2.0 - Unreleased
+
+- Clarified manual prompt-file creation versus Codex agent-assisted prompt-file creation.
+- Added first-use guidance for getting from install to detect, dry-run, readiness, and review.
+- Added a first prompt template and a `prompt:new` draft prompt helper.
+- Added a smoke-test workflow for install, prompt creation, detect, dry-run, readiness, result, and review.
+- Polished review packet guidance and markdown headings for changed files, commands, and known risks.
+- Added a non-executing `prompt:new` helper for creating or printing draft prompt files with overwrite protection.
+
+This version is prepared locally only. npm publish, the `v0.2.0` tag, and a GitHub release require separate human approval.
+
 ## 0.1.0 - 2026-05-04
 
 Initial public release for `codex-run-ledger`.

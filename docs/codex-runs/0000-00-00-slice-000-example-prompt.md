@@ -16,6 +16,8 @@ EXAMPLE ONLY - DO NOT RUN.
 
 This file demonstrates the required prompt format. It is canceled, uses fake scope, and must never be executed by Codex or automation.
 
+For a copy/paste starter prompt, see `FIRST_PROMPT_TEMPLATE.md`. For an end-to-end install test, see `SMOKE_TEST_WORKFLOW.md`.
+
 ## Objective
 
 Demonstrate the shape of a Codex slice prompt without requesting any real repository change.
