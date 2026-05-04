@@ -15,6 +15,12 @@ This project uses semver-style version numbers, with human approval required bef
 - Updated generated prompt templates, examples, prompt helpers, and review summaries to include review handoff guidance.
 - Added explicit final report requirements that include review protocol file path and review handoff instructions.
 
+## 0.2.4 - 2026-05-05
+
+- Added an explicit review handoff line in executor outputs: `run codex-run-ledger review --slice-id <slice_id> --markdown`.
+- Updated prompt templates so Codex final responses include the same review packet command.
+- Synchronized README and protocol docs to make “generate review packet + use REVIEW_PROTOCOL.md” the default end-of-slice flow.
+
 ## 0.2.2 - 2026-05-05
 
 - Fixed Windows real Codex execution by switching prompt transport from positional CLI argument to stdin (`-- -` in preview, `promptInput` as `input`).

@@ -1,6 +1,6 @@
 {
   "name": "codex-run-ledger",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A Git-backed prompt/result ledger for reliable, reviewable, and traceable autonomous Codex runs.",
   "type": "module",
   "main": "./scripts/codex-runs/cli.mjs",
