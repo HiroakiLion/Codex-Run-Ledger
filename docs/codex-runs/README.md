@@ -23,6 +23,28 @@ npx codex-run-ledger init --target-repo <owner/repo>
 
 For example, this repository would use `HiroakiLion/Codex-Run-Ledger`. This value is the target repository identifier that prompt frontmatter must match; it is not the npm package name.
 
+## How Prompt Files Are Created
+
+The ledger starts from saved files. `codex-run-ledger` detects and checks existing `*-prompt.md` files; it does not yet convert pasted chat text into a prompt file by itself.
+
+Manual workflow:
+
+1. Create `docs/codex-runs/<slice-id>-prompt.md`.
+2. Paste the Codex-ready prompt.
+3. Set `status: approved`.
+4. Set `approved_at` to the approval timestamp.
+5. Run `detect`, `dry-run`, and readiness checks.
+
+Agent-assisted workflow:
+
+1. Paste the Codex-ready prompt into Codex.
+2. Ask Codex to create the approved `docs/codex-runs/<slice-id>-prompt.md` file.
+3. Ask Codex to run the ledger checks.
+4. Ask Codex to execute the bounded slice.
+5. Ask Codex to write the paired result file.
+
+In both workflows, the saved prompt file is the durable instruction packet and the paired result file is the durable receipt.
+
 Add one approved prompt under `docs/codex-runs/`, then run the non-mutating checks:
 
 ```sh

@@ -52,7 +52,33 @@ npm install --save-dev codex-run-ledger
 npx codex-run-ledger init --target-repo HiroakiLion/Codex-Run-Ledger
 ```
 
-Create one approved `*-prompt.md` file under `docs/codex-runs/`, then inspect it before any execution:
+## How Prompts Get Into The Ledger
+
+`codex-run-ledger` works from prompt files that already exist under `docs/codex-runs/`. It detects, validates, previews, and reviews those files; it does not yet turn pasted chat text into a prompt file by itself.
+
+You have two practical ways to create the prompt file.
+
+Manual ledger workflow:
+
+1. Create `docs/codex-runs/<slice-id>-prompt.md`.
+2. Paste the Codex-ready prompt into that file.
+3. Set `status: approved`.
+4. Set `approved_at` to the approval timestamp.
+5. Run the ledger checks.
+
+Agent-assisted workflow:
+
+1. Paste the Codex-ready prompt into Codex.
+2. Ask Codex to create the approved `docs/codex-runs/<slice-id>-prompt.md` file.
+3. Ask Codex to run the ledger checks.
+4. Ask Codex to execute the bounded slice.
+5. Ask Codex to write the paired `docs/codex-runs/<slice-id>-result.md` file.
+
+In the agent-assisted path, Codex is creating the file for you because it can edit the repository. The package still treats the saved prompt file as the source of truth.
+
+## First Five Minutes
+
+Create or ask Codex to create one approved `*-prompt.md` file under `docs/codex-runs/`, then inspect it before any execution:
 
 ```sh
 npx codex-run-ledger detect
@@ -72,7 +98,7 @@ Real Codex execution is gated behind explicit opt-in flags. A prompt is consider
 
 1. Ask ChatGPT to propose the next Codex slices.
 2. Pick one slice.
-3. Save it as an approved prompt under `docs/codex-runs/`.
+3. Save it as an approved prompt under `docs/codex-runs/`, either manually or by asking Codex to create the file.
 4. Run the ledger checks.
 5. Let Codex execute only when the readiness report is clean.
 6. Review the result before creating the next prompt.

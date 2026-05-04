@@ -7,8 +7,11 @@ The normal loop is:
 1. Ask ChatGPT to propose 3-5 possible slices.
 2. Choose one slice.
 3. Ask ChatGPT to turn the approved slice into a Codex-ready parent-slice prompt.
-4. Run `codex-run-ledger detect`, `dry-run`, and `executor --readiness-report`.
-5. After Codex writes a result, ask ChatGPT to review the slice evidence.
+4. Save that prompt as an approved `docs/codex-runs/*-prompt.md` file, or paste it into Codex and ask Codex to create that file.
+5. Run `codex-run-ledger detect`, `dry-run`, and `executor --readiness-report`.
+6. After Codex writes a result, ask ChatGPT to review the slice evidence.
+
+The CLI currently works from saved prompt files. If you paste the prompt into Codex, Codex is responsible for creating the ledger file before running the checks.
 
 ## Propose Next Slices
 

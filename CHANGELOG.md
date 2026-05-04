@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project uses semver-style version numbers, with human approval required before any public npm publish, tag, or GitHub release.
 
+## Unreleased
+
+- Clarified manual prompt-file creation versus Codex agent-assisted prompt-file creation.
+- Added first-use guidance for getting from install to detect, dry-run, readiness, and review.
+
 ## 0.1.0 - 2026-05-04
 
 Initial public release for `codex-run-ledger`.
