@@ -444,7 +444,11 @@ export function renderHumanOutput(result) {
       : "No files written",
     "No commits pushed",
     "No execution was performed",
-    ""
+    "",
+    result.plan && result.selectedSliceId
+      ? `Review handoff: run codex-run-ledger review --slice-id ${result.selectedSliceId} --markdown`
+      : "Review handoff: npx codex-run-ledger review --slice-id <slice_id> --markdown",
+    "if you want to generate a review packet"
   ];
 
   if (result.plan) {

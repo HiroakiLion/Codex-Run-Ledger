@@ -210,7 +210,8 @@ function renderPromptTemplate({
     `- Skipped checks, deviations, risks, or unresolved issues\n\n` +
     `## Final Response Requirement\n\n` +
     `In the final chat response, include this one-line review handoff:\n\n` +
-    `\`Review handoff: use ${reviewProtocolFile} with this slice's prompt, result file, final diff, commits, and verification evidence.\`\n\n` +
+    `\`Review handoff: run codex-run-ledger review --slice-id ${sliceId} --markdown\\n` +
+    `If you want a review packet, this command is required; then run protocol checks using ${reviewProtocolFile}.\`\n\n` +
     `## Commit / Push Instructions\n\n` +
     `Create focused subtask commits. Push only if explicitly approved.\n`;
 }

@@ -9,7 +9,7 @@ The normal loop is:
 3. Ask ChatGPT to turn the approved slice into a Codex-ready parent-slice prompt.
 4. Save that prompt as an approved `docs/codex-runs/*-prompt.md` file, create a draft with `codex-run-ledger prompt:new`, or paste it into Codex and ask Codex to create that file.
 5. Run `codex-run-ledger detect`, `dry-run`, and `executor --readiness-report`.
-6. After Codex writes a result, ask ChatGPT to review the slice evidence.
+6. After Codex writes a result, run `codex-run-ledger review --slice-id <slice_id> --markdown` and ask ChatGPT to review with `REVIEW_PROTOCOL.md` using the prompt, result, final diff, commits, and verification evidence.
 
 The CLI works from saved prompt files. `prompt:new` can create a starter file, but it does not run Codex. If you paste the prompt into Codex, Codex is responsible for creating the ledger file before running the checks.
 

@@ -114,7 +114,7 @@ Real Codex execution is gated behind explicit opt-in flags. A prompt is consider
 3. Save it as an approved prompt under `docs/codex-runs/`, either manually or by asking Codex to create the file.
 4. Run the ledger checks.
 5. Let Codex execute only when the readiness report is clean.
-6. Review the result before creating the next prompt.
+6. Review with GPT before creating the next prompt: run `codex-run-ledger review --slice-id <slice_id> --markdown`, then ask GPT to review using `docs/codex-runs/REVIEW_PROTOCOL.md` (plus prompt file, result file, base/head refs, and changed files).
 
 ## ChatGPT Planning Prompt
 

@@ -105,6 +105,14 @@ npx codex-run-ledger dry-run --slice-id <slice_id>
 npx codex-run-ledger executor --slice-id <slice_id> --readiness-report
 ```
 
+Then review:
+
+```sh
+npx codex-run-ledger review --slice-id <slice_id> --markdown
+```
+
+and give the review packet plus context (`docs/codex-runs/REVIEW_PROTOCOL.md`, prompt file, result file, diff/commits, verification evidence) to GPT for the structured review pass.
+
 For direct source usage:
 
 ```sh
