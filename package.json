@@ -9,6 +9,7 @@
     "./config": "./scripts/codex-runs/config.mjs",
     "./detector": "./scripts/codex-runs/detect-approved-prompts.mjs",
     "./executor": "./scripts/codex-runs/local-executor.mjs",
+    "./prompt-template": "./scripts/codex-runs/prompt-template.mjs",
     "./review": "./scripts/codex-runs/review-summary-builder.mjs"
   },
   "bin": {
@@ -26,6 +27,7 @@
   "scripts": {
     "test": "node --test scripts/codex-runs/*.test.mjs",
     "ledger:init": "node scripts/codex-runs/init.mjs",
+    "ledger:prompt-new": "node scripts/codex-runs/prompt-template.mjs",
     "ledger:detect": "node scripts/codex-runs/detect-approved-prompts.mjs",
     "ledger:dry-run": "node scripts/codex-runs/local-runner-dry-run.mjs",
     "ledger:executor": "node scripts/codex-runs/local-executor.mjs",

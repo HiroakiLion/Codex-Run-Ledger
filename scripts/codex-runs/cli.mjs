@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const commands = {
   init: "init.mjs",
+  "prompt:new": "prompt-template.mjs",
   detect: "detect-approved-prompts.mjs",
   "dry-run": "local-runner-dry-run.mjs",
   executor: "local-executor.mjs",
@@ -55,12 +56,14 @@ function printHelp(write = process.stdout.write.bind(process.stdout)) {
       "",
       "Usage:",
       "  codex-run-ledger init [--target-repo <name>] [--prompt-dir <path>] [--force]",
+      "  codex-run-ledger prompt:new --slice-id <slice_id> [--stdout] [--status draft|approved]",
       "  codex-run-ledger detect [--json] [--slice-id <slice_id>] [--config <path>]",
       "  codex-run-ledger dry-run [--json] [--slice-id <slice_id>] [--config <path>]",
       "  codex-run-ledger executor [flags] [--slice-id <slice_id>] [--config <path>]",
       "  codex-run-ledger review --slice-id <slice_id> [--json|--markdown]",
       "",
       "Aliases:",
+      "  crl prompt:new --slice-id <slice_id>",
       "  crl detect",
       "  crl dry-run",
       "  crl executor",
