@@ -145,4 +145,4 @@ The repository CI runs `npm test` and `npm pack --dry-run` for pull requests and
 
 ## Release Preparation
 
-Use `RELEASE_CHECKLIST.md` before any future public release or npm publish. The checklist is preparation-only; `v0.1.0` tagging, GitHub release creation, and npm publishing are separate actions that require explicit human approval.
+Use `RELEASE_CHECKLIST.md` before any future public release or npm publish. The checklist is preparation-only; version bumps, tags, GitHub releases, and npm publishing are separate actions that require explicit human approval.

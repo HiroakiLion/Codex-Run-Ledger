@@ -135,6 +135,8 @@ For a copy/paste file structure, use the [first prompt template](docs/codex-runs
 
 To test the full lifecycle in a small target repo, follow the [smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md).
 
+Local version bumps in this repository are preparation only. Publishing to npm, creating a Git tag, and creating a GitHub release require separate human approval.
+
 ## Commands
 
 Find approved prompts that are ready to run:
