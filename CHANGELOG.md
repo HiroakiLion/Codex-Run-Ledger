@@ -8,7 +8,7 @@ This project uses semver-style version numbers, with human approval required bef
 
 - Clarified manual prompt-file creation versus Codex agent-assisted prompt-file creation.
 - Added first-use guidance for getting from install to detect, dry-run, readiness, and review.
-- Added a first prompt template and documented the future `prompt:new` / `prompt:write` direction.
+- Added a first prompt template and a `prompt:new` draft prompt helper.
 - Added a smoke-test workflow for install, prompt creation, detect, dry-run, readiness, result, and review.
 - Polished review packet guidance and markdown headings for changed files, commands, and known risks.
 - Added a non-executing `prompt:new` helper for creating or printing draft prompt files with overwrite protection.

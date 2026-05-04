@@ -51,7 +51,7 @@ Agent-assisted workflow:
 4. Ask Codex to execute the bounded slice.
 5. Ask Codex to write the paired result file.
 
-In both workflows, the saved prompt file is the durable instruction packet and the paired result file is the durable receipt.
+In all workflows, the saved prompt file is the durable instruction packet and the paired result file is the durable receipt.
 
 Add one approved prompt under `docs/codex-runs/`, then run the non-mutating checks:
 

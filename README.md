@@ -56,7 +56,7 @@ npx codex-run-ledger init --target-repo HiroakiLion/Codex-Run-Ledger
 
 `codex-run-ledger` works from prompt files that already exist under `docs/codex-runs/`. It detects, validates, previews, and reviews those files; it does not yet turn pasted chat text into a prompt file by itself.
 
-You have two practical ways to create the prompt file.
+You have three practical ways to create the prompt file.
 
 Manual ledger workflow:
 
@@ -131,7 +131,7 @@ Do not write an official Codex Run Ledger prompt yet. First present the options 
 
 After choosing a slice, use [the parent-slice prompt helper](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md#write-a-codex-ready-parent-slice-prompt) to turn it into a Codex-ready prompt with subtask commits, safety constraints, verification, deploy/tag rules, and final report format.
 
-For a copy/paste file structure, use the [first prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md). This version does not include a `prompt:new` command yet; create the file manually or ask Codex to create it.
+For a copy/paste file structure, use the [first prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md), or generate a draft with `npx codex-run-ledger prompt:new --slice-id <slice_id>`.
 
 To test the full lifecycle in a small target repo, follow the [smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md).
 
