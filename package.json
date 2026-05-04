@@ -13,8 +13,8 @@
     "./review": "./scripts/codex-runs/review-summary-builder.mjs"
   },
   "bin": {
-    "codex-run-ledger": "./scripts/codex-runs/cli.mjs",
-    "crl": "./scripts/codex-runs/cli.mjs"
+    "codex-run-ledger": "scripts/codex-runs/cli.mjs",
+    "crl": "scripts/codex-runs/cli.mjs"
   },
   "files": [
     "docs/",
