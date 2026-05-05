@@ -23,6 +23,15 @@ npx codex-run-ledger init --target-repo <owner/repo>
 
 For example, this repository would use `HiroakiLion/Codex-Run-Ledger`. This value is the target repository identifier that prompt frontmatter must match; it is not the npm package name.
 
+Init writes:
+
+```text
+codex-run-ledger.config.json
+docs/codex-runs/README.md
+docs/codex-runs/REVIEW_PROTOCOL.md
+docs/codex-runs/EXECUTION_PROTOCOL.md
+```
+
 ## How Prompt Files Are Created
 
 The ledger starts from saved files. `codex-run-ledger` detects and checks existing `*-prompt.md` files; it does not yet convert pasted chat text into a prompt file by itself.
@@ -87,6 +96,13 @@ npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markd
 The review summary is the handoff packet. It should surface prompt/result/review status, changed files, commands run, verification evidence, unresolved risks, and the recommended next action before anyone creates the next slice.
 
 For GPT review, use `REVIEW_PROTOCOL.md` with the approved prompt, paired result file, paired review packet, final diff, commits, and verification evidence. New prompt templates ask Codex to include a `Review Handoff` section in the result file and a one-line review handoff in the final chat response so the protocol is discoverable even when the review starts from pasted output.
+
+Before execution, review `EXECUTION_PROTOCOL.md` for integration-branch expectations, push policy, and result artifact rules.
+If stricter rules are required, keep a repo-specific execution protocol and reference it from prompts/review handoff guidance:
+
+```text
+docs/codex-runs/<REPO_NAME>_CODEX_EXECUTION_PROTOCOL.md
+```
 
 ## Core Idea
 
@@ -157,6 +173,7 @@ See these references for the deeper details:
 - `CHATGPT_PROMPT_HELPERS.md` for planning and prompt-writing helpers.
 - `FIRST_PROMPT_TEMPLATE.md` for a starter prompt file.
 - `REVIEW_PROTOCOL.md` for generic GPT review of completed runs.
+- `EXECUTION_PROTOCOL.md` for default execution workflow and safety expectations.
 - `SMOKE_TEST_WORKFLOW.md` for a small end-to-end install and ledger test.
 - `REAL_EXECUTION_ENABLEMENT_POLICY.md` for live execution gates.
 - `RUNNER_PLAN.md` for the local runner roadmap.

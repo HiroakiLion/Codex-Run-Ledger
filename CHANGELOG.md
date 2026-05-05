@@ -6,7 +6,15 @@ This project uses semver-style version numbers, with human approval required bef
 
 ## Unreleased
 
-- None.
+- `0.2.10` preparation updates are pending review.
+
+## 0.2.10 - 2026-05-05
+
+- `codex-run-ledger init` now also creates a generic execution protocol file at `docs/codex-runs/EXECUTION_PROTOCOL.md` (unless already present).
+- Init now preserves an existing execution protocol unless `--force` is used.
+- Added init regression tests for execution protocol creation, preservation, and overwrite semantics.
+- Updated init-scaffolded prompt README and protocol docs to reference execution protocol expectations and repo-specific override guidance (`docs/codex-runs/<REPO_NAME>_CODEX_EXECUTION_PROTOCOL.md`).
+- Updated docs (`README.md`, `docs/codex-runs/README.md`, `docs/codex-runs/SMOKE_TEST_WORKFLOW.md`) to make execution protocol discoverable in new-repo onboarding.
 
 ## 0.2.9 - 2026-05-05
 

@@ -14,6 +14,7 @@ export function initCodexRunLedger(options = {}) {
   const configPath = path.join(rootDir, "codex-run-ledger.config.json");
   const promptDir = path.join(rootDir, config.promptDir);
   const promptReadmePath = path.join(promptDir, "README.md");
+  const executionProtocolPath = path.join(promptDir, "EXECUTION_PROTOCOL.md");
   const reviewProtocolPath = path.join(promptDir, "REVIEW_PROTOCOL.md");
   const written = [];
   const skipped = [];
@@ -39,6 +40,13 @@ export function initCodexRunLedger(options = {}) {
   } else {
     writeFileSync(reviewProtocolPath, loadReviewProtocolTemplate());
     written.push(path.relative(rootDir, reviewProtocolPath).split(path.sep).join("/"));
+  }
+
+  if (!options.force && existsSync(executionProtocolPath)) {
+    skipped.push(`${config.promptDir}/EXECUTION_PROTOCOL.md already exists`);
+  } else {
+    writeFileSync(executionProtocolPath, loadExecutionProtocolTemplate());
+    written.push(path.relative(rootDir, executionProtocolPath).split(path.sep).join("/"));
   }
 
   return {
@@ -156,11 +164,13 @@ function buildPromptDirReadme(config) {
     `npx codex-run-ledger review --slice-id <slice_id> --markdown\n` +
     `\`\`\`\n\n` +
     `For GPT review handoff, use \`REVIEW_PROTOCOL.md\` with the approved prompt, paired result file, paired review packet, final diff, commits, and verification evidence.\n\n` +
+    `If your repo needs stricter execution policy, copy ` +
+    `or customize \`EXECUTION_PROTOCOL.md\` and reference the repo-specific file from prompts.\n\n` +
     `Configured target repo: \`${config.targetRepo}\`\n`;
 }
 
 function loadReviewProtocolTemplate() {
-  const protocolPath = path.resolve(
+  const packageTemplatePath = path.resolve(
     path.dirname(currentFile),
     "..",
     "..",
@@ -169,11 +179,28 @@ function loadReviewProtocolTemplate() {
     "REVIEW_PROTOCOL.md"
   );
 
-  if (existsSync(protocolPath)) {
-    return readFileSync(protocolPath, "utf8");
+  if (existsSync(packageTemplatePath)) {
+    return readFileSync(packageTemplatePath, "utf8");
   }
 
   return "# Codex Run Ledger Review Protocol\n\nReview the approved prompt, paired result file, final diff, commits, and verification evidence.\n";
+}
+
+function loadExecutionProtocolTemplate() {
+  const executionProtocolPath = path.resolve(
+    path.dirname(currentFile),
+    "..",
+    "..",
+    "docs",
+    "codex-runs",
+    "EXECUTION_PROTOCOL.md"
+  );
+
+  if (existsSync(executionProtocolPath)) {
+    return readFileSync(executionProtocolPath, "utf8");
+  }
+
+  return "# Codex Execution Protocol\n\nThis repository should include `docs/codex-runs/EXECUTION_PROTOCOL.md`.\n";
 }
 
 const currentFile = fileURLToPath(import.meta.url);

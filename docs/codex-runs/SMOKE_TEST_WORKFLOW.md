@@ -15,6 +15,8 @@ Expected result:
 
 - `codex-run-ledger.config.json` exists.
 - `docs/codex-runs/README.md` exists.
+- `docs/codex-runs/REVIEW_PROTOCOL.md` exists.
+- `docs/codex-runs/EXECUTION_PROTOCOL.md` exists.
 - No prompt is runnable yet.
 
 ## 2. Create A Tiny Prompt

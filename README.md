@@ -29,6 +29,7 @@ This creates:
 codex-run-ledger.config.json
 docs/codex-runs/README.md
 docs/codex-runs/REVIEW_PROTOCOL.md
+docs/codex-runs/EXECUTION_PROTOCOL.md
 ```
 
 The generated config starts like this:
@@ -195,6 +196,8 @@ The markdown summary is meant to be pasted into a review conversation. It should
 
 For strict GPT review, pair the summary with `docs/codex-runs/REVIEW_PROTOCOL.md`.
 
+Before execution, also review `docs/codex-runs/EXECUTION_PROTOCOL.md` for branch, push, and run-scope expectations. If the repo has stricter rules, maintain a repo-specific execution protocol (for example `docs/codex-runs/<REPO_NAME>_CODEX_EXECUTION_PROTOCOL.md`) and reference it from your prompt/review instructions.
+
 Short alias:
 
 ```sh
@@ -242,6 +245,7 @@ If the result file already exists, the prompt is considered consumed and will no
 - [Prompt helpers](docs/codex-runs/CHATGPT_PROMPT_HELPERS.md)
 - [First prompt template](docs/codex-runs/FIRST_PROMPT_TEMPLATE.md)
 - [Review protocol](docs/codex-runs/REVIEW_PROTOCOL.md)
+- [Execution protocol](docs/codex-runs/EXECUTION_PROTOCOL.md)
 - [Smoke test workflow](docs/codex-runs/SMOKE_TEST_WORKFLOW.md)
 - [Execution policy](docs/codex-runs/REAL_EXECUTION_ENABLEMENT_POLICY.md)
 - [Runner plan](docs/codex-runs/RUNNER_PLAN.md)

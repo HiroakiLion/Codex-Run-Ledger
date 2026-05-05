@@ -15,7 +15,8 @@ test("initializes config and prompt directory readme", () => {
   assert.deepEqual(result.written, [
     "codex-run-ledger.config.json",
     "docs/codex-runs/README.md",
-    "docs/codex-runs/REVIEW_PROTOCOL.md"
+    "docs/codex-runs/REVIEW_PROTOCOL.md",
+    "docs/codex-runs/EXECUTION_PROTOCOL.md"
   ]);
   assert.equal(result.config.targetRepo, "sample-repo");
 
@@ -28,12 +29,19 @@ test("initializes config and prompt directory readme", () => {
   const readme = readFileSync(path.join(rootDir, "docs", "codex-runs", "README.md"), "utf8");
   assert.match(readme, /npx codex-run-ledger detect/);
   assert.match(readme, /REVIEW_PROTOCOL\.md/);
+  assert.match(readme, /EXECUTION_PROTOCOL\.md/);
 
   const protocol = readFileSync(
     path.join(rootDir, "docs", "codex-runs", "REVIEW_PROTOCOL.md"),
     "utf8"
   );
   assert.match(protocol, /Codex Run Ledger Review Protocol/);
+
+  const executionProtocol = readFileSync(
+    path.join(rootDir, "docs", "codex-runs", "EXECUTION_PROTOCOL.md"),
+    "utf8"
+  );
+  assert.match(executionProtocol, /Codex Run Ledger Execution Protocol/);
 });
 
 test("does not overwrite existing files without force", () => {
@@ -47,23 +55,29 @@ test("does not overwrite existing files without force", () => {
 
   assert.equal(config.targetRepo, "first-repo");
   assert.equal(result.written.length, 0);
-  assert.equal(result.skipped.length, 3);
+  assert.equal(result.skipped.length, 4);
 });
 
 test("preserves existing REVIEW_PROTOCOL.md during init", () => {
   const rootDir = mkdtempSync(path.join(tmpdir(), "codex-run-ledger-init-"));
   const protocolPath = path.join(rootDir, "docs", "codex-runs", "REVIEW_PROTOCOL.md");
+  const executionProtocolPath = path.join(rootDir, "docs", "codex-runs", "EXECUTION_PROTOCOL.md");
   const customContent = "# Repo-Local Review Protocol\n\nThis repo keeps its own review policy.\n";
+  const customExecutionContent = "# Repo-Local Execution Protocol\n\nThis repo keeps its own execution policy.\n";
 
   initCodexRunLedger({ rootDir, targetRepo: "sample-repo" });
   writeFileSync(protocolPath, customContent);
+  writeFileSync(executionProtocolPath, customExecutionContent);
 
   const result = initCodexRunLedger({ rootDir, targetRepo: "second-repo" });
   const protocol = readFileSync(protocolPath, "utf8");
+  const executionProtocol = readFileSync(executionProtocolPath, "utf8");
 
   assert.equal(result.written.length, 0);
   assert.equal(result.skipped.includes("docs/codex-runs/REVIEW_PROTOCOL.md already exists"), true);
+  assert.equal(result.skipped.includes("docs/codex-runs/EXECUTION_PROTOCOL.md already exists"), true);
   assert.equal(protocol, customContent);
+  assert.equal(executionProtocol, customExecutionContent);
 });
 
 test("force overwrites generated files", () => {
