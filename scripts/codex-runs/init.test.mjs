@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -48,6 +48,22 @@ test("does not overwrite existing files without force", () => {
   assert.equal(config.targetRepo, "first-repo");
   assert.equal(result.written.length, 0);
   assert.equal(result.skipped.length, 3);
+});
+
+test("preserves existing REVIEW_PROTOCOL.md during init", () => {
+  const rootDir = mkdtempSync(path.join(tmpdir(), "codex-run-ledger-init-"));
+  const protocolPath = path.join(rootDir, "docs", "codex-runs", "REVIEW_PROTOCOL.md");
+  const customContent = "# Repo-Local Review Protocol\n\nThis repo keeps its own review policy.\n";
+
+  initCodexRunLedger({ rootDir, targetRepo: "sample-repo" });
+  writeFileSync(protocolPath, customContent);
+
+  const result = initCodexRunLedger({ rootDir, targetRepo: "second-repo" });
+  const protocol = readFileSync(protocolPath, "utf8");
+
+  assert.equal(result.written.length, 0);
+  assert.equal(result.skipped.includes("docs/codex-runs/REVIEW_PROTOCOL.md already exists"), true);
+  assert.equal(protocol, customContent);
 });
 
 test("force overwrites generated files", () => {

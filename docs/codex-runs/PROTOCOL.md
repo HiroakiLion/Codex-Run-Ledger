@@ -136,10 +136,10 @@ Every result should include:
 
 ## Review Packet
 
-After a result, attempt artifact, or verification artifact exists, reviewers can build a review packet with:
+After a result, attempt artifact, or verification artifact exists, reviewers can build the review packet with:
 
 ```sh
-npx codex-run-ledger review --slice-id <slice_id> --markdown
+npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown
 ```
 
 The packet should make these items easy to scan:

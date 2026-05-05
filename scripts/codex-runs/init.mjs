@@ -140,20 +140,22 @@ function parseCliArgs(args) {
 
 function buildPromptDirReadme(config) {
   return `# Codex Run Ledger\n\n` +
-    `This directory stores approved Codex run prompts and paired result files.\n\n` +
+    `This directory stores approved Codex run prompts, paired result files, and review packets.\n\n` +
     `Default file pattern:\n\n` +
     `\`\`\`text\n` +
     `YYYY-MM-DD-slice-NNN-short-name-prompt.md\n` +
     `YYYY-MM-DD-slice-NNN-short-name-result.md\n` +
+    `YYYY-MM-DD-slice-NNN-short-name-review.md\n` +
     `\`\`\`\n\n` +
     `Useful commands:\n\n` +
     `\`\`\`sh\n` +
     `npx codex-run-ledger detect\n` +
     `npx codex-run-ledger dry-run --slice-id <slice_id>\n` +
     `npx codex-run-ledger executor --slice-id <slice_id> --readiness-report\n` +
+    `npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown\n` +
     `npx codex-run-ledger review --slice-id <slice_id> --markdown\n` +
     `\`\`\`\n\n` +
-    `For GPT review handoff, use \`REVIEW_PROTOCOL.md\` with the approved prompt, paired result file, final diff, commits, and verification evidence.\n\n` +
+    `For GPT review handoff, use \`REVIEW_PROTOCOL.md\` with the approved prompt, paired result file, paired review packet, final diff, commits, and verification evidence.\n\n` +
     `Configured target repo: \`${config.targetRepo}\`\n`;
 }
 

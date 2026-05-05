@@ -60,7 +60,7 @@ function printHelp(write = process.stdout.write.bind(process.stdout)) {
       "  codex-run-ledger detect [--json] [--slice-id <slice_id>] [--config <path>]",
       "  codex-run-ledger dry-run [--json] [--slice-id <slice_id>] [--config <path>]",
       "  codex-run-ledger executor [flags] [--slice-id <slice_id>] [--config <path>]",
-      "  codex-run-ledger review --slice-id <slice_id> [--json|--markdown]",
+      "  codex-run-ledger review --slice-id <slice_id> [--json|--markdown] [--write-review-summary]",
       "",
       "Aliases:",
       "  crl prompt:new --slice-id <slice_id>",

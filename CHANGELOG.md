@@ -8,6 +8,14 @@ This project uses semver-style version numbers, with human approval required bef
 
 - None.
 
+## 0.2.9 - 2026-05-05
+
+- Ensure `codex-run-ledger init` creates `docs/codex-runs/REVIEW_PROTOCOL.md` when missing and preserves existing files without overwrite.
+- Treat the review packet as a first-class artifact in workflow guidance (`README`, `docs/codex-runs/README.md`, `FIRST_PROMPT_TEMPLATE.md`, `REVIEW_PROTOCOL.md`) and link prompt/result/review review flow to GPT handoff commands.
+- Update `prompt:new` output and templates to require a paired `*-review.md` and include an explicit review handoff to `REVIEW_PROTOCOL.md`.
+- Add init and prompt-template tests for review-protocol creation, preservation, and review packet scaffolding.
+- Update docs references so `--write-review-summary` is the standard command for producing review packets.
+
 ## 0.2.8 - 2026-05-05
 
 - Removed the hardcoded `npm.cmd test` default from generated prompts to avoid assuming a root `npm test` script exists.

@@ -1,13 +1,13 @@
 # Codex Run Ledger
 
-A Git-backed prompt/result ledger for reliable, reviewable, and traceable autonomous Codex runs.
+A Git-backed prompt/result/review ledger for reliable, reviewable, and traceable autonomous Codex runs.
 
 It helps you make Codex runs more reliable, reviewable, and traceable:
 
 - write one approved `*-prompt.md` file for the work;
 - let Codex work from that prompt;
-- keep one paired `*-result.md` file as the receipt;
-- review the prompt, result, verification, and diff with `codex-run-ledger review --slice-id <slice_id> --markdown` and GPT using `docs/codex-runs/REVIEW_PROTOCOL.md` before deciding what comes next.
+- keep paired `*-result.md` and `*-review.md` files as the durable receipts;
+- review the prompt, result, verification, and diff with `codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown` and GPT using `docs/codex-runs/REVIEW_PROTOCOL.md` before deciding what comes next.
 
 No database. No server. No hosted dependency. Just files in your repo.
 
@@ -89,6 +89,7 @@ Agent-assisted workflow:
 3. Ask Codex to run the ledger checks.
 4. Ask Codex to execute the bounded slice.
 5. Ask Codex to write the paired `docs/codex-runs/<slice-id>-result.md` file.
+6. Ask Codex to write the paired `docs/codex-runs/<slice-id>-review.md` file.
 
 In the agent-assisted path, Codex is creating the file for you because it can edit the repository. The package still treats the saved prompt file as the source of truth.
 
@@ -105,12 +106,13 @@ npx codex-run-ledger executor --slice-id <slice_id> --readiness-report
 After Codex writes the paired `*-result.md`, build a review packet:
 
 ```sh
-npx codex-run-ledger review --slice-id <slice_id> --markdown
+npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown
 ```
 
-The review packet gathers the prompt/result status, artifact paths, changed files, commands run, verification evidence, known risks, and recommended next action. Use it as the handoff back to ChatGPT or a human reviewer before planning the next slice.
+The review packet gathers the prompt/result/review status, artifact paths, changed files, commands run, verification evidence, known risks, and recommended next action. Use it as the handoff back to ChatGPT or a human reviewer before planning the next slice.
+Commit the full triplet (`*-prompt.md`, `*-result.md`, `*-review.md`) together once execution and review are complete.
 
-For deeper review, use `docs/codex-runs/REVIEW_PROTOCOL.md` with the approved prompt, paired result file, final diff, commits, and verification evidence. New prompt templates also ask Codex to include a review handoff in the result file and final chat response.
+For deeper review, use `docs/codex-runs/REVIEW_PROTOCOL.md` with the approved prompt, paired result file, paired review packet, final diff, commits, and verification evidence. New prompt templates also ask Codex to include a review handoff in the result file and final chat response.
 
 Real Codex execution is gated behind explicit opt-in flags. A prompt is considered consumed once its paired result file exists.
 
@@ -121,7 +123,7 @@ Real Codex execution is gated behind explicit opt-in flags. A prompt is consider
 3. Save it as an approved prompt under `docs/codex-runs/`, either manually or by asking Codex to create the file.
 4. Run the ledger checks.
 5. Let Codex execute only when the readiness report is clean.
-6. Review with GPT before creating the next prompt: run `codex-run-ledger review --slice-id <slice_id> --markdown`, then ask GPT to review using `docs/codex-runs/REVIEW_PROTOCOL.md` (plus prompt file, result file, base/head refs, and changed files).
+6. Review with GPT before creating the next prompt: run `codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown`, then ask GPT to review using `docs/codex-runs/REVIEW_PROTOCOL.md` (plus prompt file, result file, review packet, base/head refs, and changed files).
 
 ## ChatGPT Planning Prompt
 
@@ -186,7 +188,7 @@ npx codex-run-ledger executor \
 Build a review summary:
 
 ```sh
-npx codex-run-ledger review --slice-id <slice_id> --markdown
+npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown
 ```
 
 The markdown summary is meant to be pasted into a review conversation. It should make the prompt summary, result summary, verification evidence, changed files, unresolved risks, and suggested next slice easy to scan.
@@ -204,7 +206,7 @@ The alias works for the same subcommands:
 ```sh
 npx crl dry-run --slice-id <slice_id>
 npx crl executor --slice-id <slice_id> --readiness-report
-npx crl review --slice-id <slice_id> --markdown
+npx crl review --slice-id <slice_id> --write-review-summary --markdown
 ```
 
 ## File Layout
@@ -215,11 +217,12 @@ By default, ledger files live here:
 docs/codex-runs/
 ```
 
-Prompt/result pairs look like this:
+Prompt/result/review triplets look like this:
 
 ```text
 2026-05-04-slice-001-example-prompt.md
 2026-05-04-slice-001-example-result.md
+2026-05-04-slice-001-example-review.md
 ```
 
 If the result file already exists, the prompt is considered consumed and will not run again automatically.

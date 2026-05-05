@@ -1,6 +1,6 @@
 # Codex Run Ledger Protocol
 
-This directory documents the default prompt/result ledger layout used by the `codex-run-ledger` package.
+This directory documents the default prompt/result/review ledger layout used by the `codex-run-ledger` package.
 
 If you are new, start with the root `README.md` first. This file is the protocol-oriented reference.
 
@@ -64,8 +64,9 @@ Agent-assisted workflow:
 3. Ask Codex to run the ledger checks.
 4. Ask Codex to execute the bounded slice.
 5. Ask Codex to write the paired result file.
+6. Ask Codex to write the paired review packet.
 
-In all workflows, the saved prompt file is the durable instruction packet and the paired result file is the durable receipt.
+In all workflows, the saved prompt file is the durable instruction packet, the paired result file is the durable receipt, and the review packet is the durable handoff.
 
 Add one approved prompt under `docs/codex-runs/`, then run the non-mutating checks:
 
@@ -80,25 +81,28 @@ Real Codex execution requires explicit opt-in flags after readiness passes. When
 Build a review summary after a result or attempt artifact exists:
 
 ```sh
-npx codex-run-ledger review --slice-id <slice_id> --markdown
+npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown
 ```
 
-The review summary is the handoff packet. It should surface prompt/result status, changed files, commands run, verification evidence, unresolved risks, and the recommended next action before anyone creates the next slice.
+The review summary is the handoff packet. It should surface prompt/result/review status, changed files, commands run, verification evidence, unresolved risks, and the recommended next action before anyone creates the next slice.
 
-For GPT review, use `REVIEW_PROTOCOL.md` with the approved prompt, paired result file, final diff, commits, and verification evidence. New prompt templates ask Codex to include a `Review Handoff` section in the result file and a one-line review handoff in the final chat response so the protocol is discoverable even when the review starts from pasted output.
+For GPT review, use `REVIEW_PROTOCOL.md` with the approved prompt, paired result file, paired review packet, final diff, commits, and verification evidence. New prompt templates ask Codex to include a `Review Handoff` section in the result file and a one-line review handoff in the final chat response so the protocol is discoverable even when the review starts from pasted output.
 
 ## Core Idea
 
-Each unit of work is represented by a prompt/result pair:
+Each unit of work is represented by a prompt/result/review triplet:
 
 ```text
 YYYY-MM-DD-slice-NNN-short-name-prompt.md
 YYYY-MM-DD-slice-NNN-short-name-result.md
+YYYY-MM-DD-slice-NNN-short-name-review.md
 ```
 
-The prompt is the approved instruction packet. The result is the durable receipt. A prompt with an existing paired result is considered consumed and must not be run again automatically.
+The prompt is the approved instruction packet. The result is the durable receipt. The review packet is the durable handoff.
 
-The paired result file is written after execution regardless of how the prompt file was created. Manual prompt creation and Codex-agent prompt creation both end in the same review flow: inspect the prompt, inspect the result, inspect verification evidence, then decide the next slice.
+A prompt with an existing paired result is considered consumed and must not be run again automatically.
+
+The paired result and review packet files are written after execution regardless of how the prompt file was created. Manual prompt creation and Codex-agent prompt creation both end in the same review flow: inspect the prompt, inspect the result/review packet, inspect verification evidence, then decide the next slice.
 
 ## Useful Commands
 
@@ -107,7 +111,7 @@ npx codex-run-ledger prompt:new --slice-id <slice_id>
 npx codex-run-ledger detect --json
 npx codex-run-ledger dry-run --json
 npx codex-run-ledger executor --readiness-report
-npx codex-run-ledger review --slice-id <slice_id> --markdown
+npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown
 ```
 
 Typical first pass:
@@ -122,10 +126,12 @@ npx codex-run-ledger executor --slice-id <slice_id> --readiness-report
 Then review:
 
 ```sh
-npx codex-run-ledger review --slice-id <slice_id> --markdown
+npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown
 ```
 
-and give the review packet plus context (`docs/codex-runs/REVIEW_PROTOCOL.md`, prompt file, result file, diff/commits, verification evidence) to GPT for the structured review pass.
+Commit the prompt, result, and review packet together once review generation is complete.
+
+and give the review packet plus context (`docs/codex-runs/REVIEW_PROTOCOL.md`, prompt file, result file, review packet, diff/commits, verification evidence) to GPT for the structured review pass.
 
 For direct source usage:
 
@@ -133,7 +139,7 @@ For direct source usage:
 node scripts/codex-runs/detect-approved-prompts.mjs --json
 node scripts/codex-runs/local-runner-dry-run.mjs --json
 node scripts/codex-runs/local-executor.mjs --readiness-report
-node scripts/codex-runs/review-summary-builder.mjs --slice-id <slice_id> --markdown
+node scripts/codex-runs/review-summary-builder.mjs --slice-id <slice_id> --markdown --write-review-summary
 ```
 
 ## Safety Defaults
@@ -141,7 +147,7 @@ node scripts/codex-runs/review-summary-builder.mjs --slice-id <slice_id> --markd
 - Draft, canceled, malformed, and example prompts are skipped.
 - `main` and `master` are forbidden execution targets by default.
 - Multiple runnable prompts fail closed unless `--slice-id` selects one.
-- Existing paired result files are never overwritten.
+- Existing paired result and review files are never overwritten.
 - Real Codex execution requires explicit flags and passing readiness gates.
 - Git mutation is preview-only in this version.
 

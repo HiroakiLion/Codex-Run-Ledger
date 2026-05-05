@@ -446,9 +446,9 @@ export function renderHumanOutput(result) {
     "No execution was performed",
     "",
     result.plan && result.selectedSliceId
-      ? `Review handoff: run codex-run-ledger review --slice-id ${result.selectedSliceId} --markdown`
-      : "Review handoff: npx codex-run-ledger review --slice-id <slice_id> --markdown",
-    "if you want to generate a review packet"
+      ? `Review handoff: run codex-run-ledger review --slice-id ${result.selectedSliceId} --write-review-summary --markdown`
+      : "Review handoff: npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markdown",
+    "then run protocol checks using docs/codex-runs/REVIEW_PROTOCOL.md"
   ];
 
   if (result.plan) {

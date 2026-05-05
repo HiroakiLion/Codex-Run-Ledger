@@ -31,6 +31,8 @@ export function buildPromptTemplate(options = {}) {
 
   validateApprovalState({ status, approvedAt });
 
+  const promptDir = config.promptDir;
+
   return {
     promptTemplateVersion: 1,
     rootDir,
@@ -48,6 +50,7 @@ export function buildPromptTemplate(options = {}) {
       targetRepo,
       targetBranch,
       resultFile,
+      promptDir,
       reviewProtocolFile,
       verificationCommands: config.defaultVerificationCommands,
       createdAt,
@@ -156,6 +159,7 @@ function renderPromptTemplate({
   targetRepo,
   targetBranch,
   resultFile,
+  promptDir,
   reviewProtocolFile,
   verificationCommands,
   createdAt,
@@ -201,7 +205,10 @@ function renderPromptTemplate({
     `## Result File Instructions\n\n` +
     `Write the paired result file:\n\n` +
     `\`${resultFile}\`\n\n` +
+    `Write the paired review packet:\n\n` +
+  `\`${promptDir}/${sliceId}-review.md\`\n\n` +
     `Do not overwrite an existing result file.\n\n` +
+    `Do not overwrite an existing review packet file.\n\n` +
     `The result file must include a \`Review Handoff\` section with:\n\n` +
     `- Review protocol: \`${reviewProtocolFile}\`\n` +
     `- Prompt file: \`${promptFile}\`\n` +
@@ -212,8 +219,8 @@ function renderPromptTemplate({
     `- Skipped checks, deviations, risks, or unresolved issues\n\n` +
     `## Final Response Requirement\n\n` +
     `In the final chat response, include this one-line review handoff:\n\n` +
-    `\`Review handoff: run codex-run-ledger review --slice-id ${sliceId} --markdown\\n` +
-    `If you want a review packet, this command is required; then run protocol checks using ${reviewProtocolFile}.\`\n\n` +
+    `\`Review handoff: run codex-run-ledger review --slice-id ${sliceId} --write-review-summary --markdown\\n` +
+    `Then run protocol checks using ${reviewProtocolFile}.\`\n\n` +
     `## Commit / Push Instructions\n\n` +
     `Create focused subtask commits. Push only if explicitly approved.\n`;
 }

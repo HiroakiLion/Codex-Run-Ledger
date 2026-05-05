@@ -2,13 +2,24 @@
 
 Use this protocol when reviewing a completed Codex implementation run.
 
+Before review, inspect these artifacts in this order:
+
+1. `docs/codex-runs/REVIEW_PROTOCOL.md` (this protocol)
+2. The generated review packet: `docs/codex-runs/{{SLICE_ID}}-review.md`
+3. The approved prompt: `docs/codex-runs/{{SLICE_ID}}-prompt.md`
+4. The paired result: `docs/codex-runs/{{SLICE_ID}}-result.md`
+5. `git diff {{BASE_REF}}...{{HEAD_REF}}` and equivalent commit evidence
+
 The reviewer compares:
 
 1. The approved slice prompt.
 2. The paired Codex result file.
-3. The final Git diff, changed files, and commits.
-4. Any verification output included in the result or durable artifacts.
-5. Any project-specific safety or scope rules defined by the prompt.
+3. The generated review packet.
+4. The final Git diff, changed files, and commits.
+5. Any verification output included in the result or durable artifacts.
+6. Any project-specific safety or scope rules defined by the prompt.
+
+The generated review packet is required for every completed slice and should be committed together with prompt/result artifacts.
 
 This is a review pass only. Do not implement fixes while performing the review.
 
@@ -59,6 +70,17 @@ Use `needs_fix` when the run is close, but requires a bounded fix before approva
 Use `blocked` when the run cannot be judged or cannot proceed because required information is missing or repository state is unclear. Examples include missing prompt/result files, ambiguous base/head refs, an uninspectable diff, or required verification that cannot be performed and is not acceptably explained.
 
 Use `unsafe_or_out_of_scope` when the run violates explicit prompt boundaries, adds prohibited behavior, modifies unrelated areas, invents unauthorized architecture, or creates risky side effects.
+
+## Required Review Packet Checks
+
+- Confirm `{{SLICE_ID}}-review.md` exists for the slice and is from this review scope.
+- Confirm the review packet references the same `-prompt.md` and `-result.md`.
+- Confirm prompt scope matches changed files.
+- Confirm result claims and command/verification evidence match actual run output or durable artifacts.
+- Confirm base branch, working branch, review base ref, and latest pushed commit are present and coherent.
+- Confirm environment block is present (or explicitly reported unavailable) and reflects execution context.
+- Confirm push status is honest (`not pushed`, `pushed`, or `blocked by policy`) with evidence.
+- Confirm skipped checks and runtime smoke gaps are explicitly listed.
 
 ## Hard Review Rules
 

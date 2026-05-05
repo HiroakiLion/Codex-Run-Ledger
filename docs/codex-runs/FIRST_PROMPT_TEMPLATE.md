@@ -66,7 +66,7 @@ Describe what Codex may change.
 ## Verification Commands
 
 - `git diff --check`
-- Add or replace commands here based on the target repo’s verification setup (for example `npm test`, `pnpm test`, `pytest`, etc.).
+- Add or replace commands here based on the target repo verification setup (for example `npm test`, `pnpm test`, `pytest`, etc.).
 - Default reusable verification commands are also configurable via `codex-run-ledger.config.json` (`defaultVerificationCommands`), which `prompt:new` uses when no custom text is added.
 
 ## Deployment / Runtime Checks
@@ -87,13 +87,18 @@ Write the paired result file:
 
 `docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-result.md`
 
-Do not overwrite an existing result file.
+Create and commit the paired review packet:
+
+`docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-review.md`
+
+Do not overwrite existing prompt/result/review files.
 
 The result file must include a `Review Handoff` section with:
 
 - Review protocol: `docs/codex-runs/REVIEW_PROTOCOL.md`
 - Prompt file: `docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-prompt.md`
 - Result file: `docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-result.md`
+- Review packet: `docs/codex-runs/YYYY-MM-DD-slice-NNN-short-name-review.md`
 - Base ref used for review, if known
 - Head ref or final commit SHA, if known
 - Verification commands and outcomes
@@ -107,7 +112,11 @@ In the final chat response, include this one-line review handoff:
 
 ## Commit / Push Instructions
 
-Create focused subtask commits. Push only if explicitly approved.
+Create focused subtask commits.
+
+Commit and push `*-prompt.md`, `*-result.md`, and `*-review.md` together when execution/review is complete, and only if explicitly approved.
+
+Push only if explicitly approved.
 ```
 
 Before running the slice, change:

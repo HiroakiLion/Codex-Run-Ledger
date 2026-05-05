@@ -25,12 +25,13 @@ test("writes a draft prompt template under configured promptDir", () => {
   assert.match(content, /approved_at: null/);
   assert.match(content, /## Result File Instructions/);
   assert.match(content, /Review protocol: `ledger\/REVIEW_PROTOCOL\.md`/);
+  assert.match(content, /Write the paired review packet/);
   assert.match(content, /## Final Response Requirement/);
   assert.match(
     content,
-    /Review handoff: run codex-run-ledger review --slice-id 2026-05-04-slice-003-template-command --markdown/
+    /Review handoff: run codex-run-ledger review --slice-id 2026-05-04-slice-003-template-command --write-review-summary --markdown/
   );
-  assert.match(content, /then run protocol checks using ledger\/REVIEW_PROTOCOL\.md/);
+  assert.match(content, /Then run protocol checks using ledger\/REVIEW_PROTOCOL\.md/);
   assert.match(content, /git diff --check/);
   assert.doesNotMatch(content, /npm\.cmd test/);
   assert.match(content, /replace or extend this list in `codex-run-ledger\.config\.json`/i);

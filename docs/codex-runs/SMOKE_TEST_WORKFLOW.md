@@ -89,6 +89,15 @@ Expected result:
 - The result file records summary, files changed, commands run, verification, risks, and next slice.
 - The prompt is now consumed because its paired result file exists.
 
+Required review packet:
+
+```sh
+npx codex-run-ledger review --slice-id YYYY-MM-DD-slice-001-smoke-test --write-review-summary --markdown
+```
+
+- A review packet appears as `docs/codex-runs/YYYY-MM-DD-slice-001-smoke-test-review.md`.
+- The review packet is the artifact expected by the generic review protocol and should be committed with the result file.
+
 ## 6. Build The Review Packet
 
 ```sh
