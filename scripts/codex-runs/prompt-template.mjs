@@ -201,7 +201,9 @@ function renderPromptTemplate({
     `## Risk Level\n\n` +
     `Low.\n\n` +
     `## Review Requirement\n\n` +
-    `Human review required before merge or release.\n\n` +
+    `Human review required before merge or release.\n` +
+    `Review packets are handoff artifacts and must not claim final approval.\n` +
+    `Do not self-approve the packet (avoid \`review_status: approved\` or \`reviewer: chatgpt-self-review\`).\n\n` +
     `## Result File Instructions\n\n` +
     `Write the paired result file:\n\n` +
     `\`${resultFile}\`\n\n` +
@@ -220,7 +222,8 @@ function renderPromptTemplate({
     `## Final Response Requirement\n\n` +
     `In the final chat response, include this one-line review handoff:\n\n` +
     `\`Review handoff: run codex-run-ledger review --slice-id ${sliceId} --write-review-summary --markdown\\n` +
-    `Then run protocol checks using ${reviewProtocolFile}.\`\n\n` +
+    `Then run protocol checks using ${reviewProtocolFile}.\`\n` +
+    `This is a review handoff, not an approval.\n\n` +
     `## Commit / Push Instructions\n\n` +
     `Create focused subtask commits. Push only if explicitly approved.\n`;
 }

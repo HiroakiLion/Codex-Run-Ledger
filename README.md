@@ -111,6 +111,8 @@ npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markd
 ```
 
 The review packet gathers the prompt/result/review status, artifact paths, changed files, commands run, verification evidence, known risks, and recommended next action. Use it as the handoff back to ChatGPT or a human reviewer before planning the next slice.
+
+This packet is intentionally not a final approval. It should be treated as a **review handoff** only.
 Commit the full triplet (`*-prompt.md`, `*-result.md`, `*-review.md`) together once execution and review are complete.
 
 For deeper review, use `docs/codex-runs/REVIEW_PROTOCOL.md` with the approved prompt, paired result file, paired review packet, final diff, commits, and verification evidence. New prompt templates also ask Codex to include a review handoff in the result file and final chat response.
@@ -193,6 +195,8 @@ npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markd
 ```
 
 The markdown summary is meant to be pasted into a review conversation. It should make the prompt summary, result summary, verification evidence, changed files, unresolved risks, and suggested next slice easy to scan.
+
+The summary packet itself is for review handoff only and does not represent final approval.
 
 For strict GPT review, pair the summary with `docs/codex-runs/REVIEW_PROTOCOL.md`.
 

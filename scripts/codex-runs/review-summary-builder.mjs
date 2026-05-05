@@ -131,6 +131,7 @@ export function renderReviewSummaryMarkdown(packet) {
     `- Prompt status: ${packet.promptStatus}`,
     `- Runnable status: ${packet.runnableStatus}`,
     `- Result status: ${packet.resultStatus ?? "none"}`,
+    "- Packet role: human review handoff (not a final approval)",
     `- Recommended next action: ${packet.recommendedNextAction}`,
     "",
     "## Summary",
@@ -469,7 +470,7 @@ function determineRecommendedNextAction({
     return "needs_retry_prompt";
   }
 
-  return "ready_for_chatgpt_review";
+  return "ready_for_human_review";
 }
 
 function buildHumanSummary({

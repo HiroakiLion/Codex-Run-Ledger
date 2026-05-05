@@ -75,6 +75,8 @@ Use `unsafe_or_out_of_scope` when the run violates explicit prompt boundaries, a
 
 - Confirm `{{SLICE_ID}}-review.md` exists for the slice and is from this review scope.
 - Confirm the review packet references the same `-prompt.md` and `-result.md`.
+- Confirm this packet is a handoff artifact and does not self-approve.
+- Flag disallowed self-approval markers such as `review_status: approved` or `reviewer: chatgpt-self-review`.
 - Confirm prompt scope matches changed files.
 - Confirm result claims and command/verification evidence match actual run output or durable artifacts.
 - Confirm base branch, working branch, review base ref, and latest pushed commit are present and coherent.

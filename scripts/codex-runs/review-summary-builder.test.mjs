@@ -24,7 +24,7 @@ test("completed result with passing verification recommends ChatGPT review", () 
   assert.equal(packet.resultExists, true);
   assert.equal(packet.resultStatus, "completed");
   assert.equal(packet.verificationSummary.passed, true);
-  assert.equal(packet.recommendedNextAction, "ready_for_chatgpt_review");
+  assert.equal(packet.recommendedNextAction, "ready_for_human_review");
   assert.equal(packet.runnableStatus, "completed");
   assert.equal(packet.reviewProtocolFile, "docs/codex-runs/REVIEW_PROTOCOL.md");
 });
@@ -39,7 +39,7 @@ test("result without verification artifact still produces packet with warning", 
   const packet = buildReviewSummaryPacket({ rootDir, sliceId });
 
   assert.equal(packet.verificationArtifactFile, null);
-  assert.equal(packet.recommendedNextAction, "ready_for_chatgpt_review");
+  assert.equal(packet.recommendedNextAction, "ready_for_human_review");
   assert.ok(packet.warnings.some((warning) => warning.includes("without a verification")));
 });
 
@@ -186,6 +186,7 @@ test("markdown output contains concise review sections", () => {
   }
 
   assert.ok(markdown.includes("- Review protocol: docs/codex-runs/REVIEW_PROTOCOL.md"));
+  assert.ok(markdown.includes("Packet role: human review handoff"));
 });
 
 test("write-review-summary writes once under docs codex-runs", () => {

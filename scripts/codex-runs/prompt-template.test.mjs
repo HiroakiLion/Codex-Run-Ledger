@@ -31,6 +31,8 @@ test("writes a draft prompt template under configured promptDir", () => {
     content,
     /Review handoff: run codex-run-ledger review --slice-id 2026-05-04-slice-003-template-command --write-review-summary --markdown/
   );
+  assert.match(content, /must not claim final approval|handoff/);
+  assert.match(content, /chatgpt-self-review/i);
   assert.match(content, /Then run protocol checks using ledger\/REVIEW_PROTOCOL\.md/);
   assert.match(content, /git diff --check/);
   assert.doesNotMatch(content, /npm\.cmd test/);

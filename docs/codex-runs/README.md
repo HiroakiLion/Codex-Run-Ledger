@@ -95,6 +95,8 @@ npx codex-run-ledger review --slice-id <slice_id> --write-review-summary --markd
 
 The review summary is the handoff packet. It should surface prompt/result/review status, changed files, commands run, verification evidence, unresolved risks, and the recommended next action before anyone creates the next slice.
 
+Treat the review packet as a handoff only. It must not be interpreted as a final approval by itself; human review still decides go/no-go.
+
 For GPT review, use `REVIEW_PROTOCOL.md` with the approved prompt, paired result file, paired review packet, final diff, commits, and verification evidence. New prompt templates ask Codex to include a `Review Handoff` section in the result file and a one-line review handoff in the final chat response so the protocol is discoverable even when the review starts from pasted output.
 
 Before execution, review `EXECUTION_PROTOCOL.md` for integration-branch expectations, push policy, and result artifact rules.

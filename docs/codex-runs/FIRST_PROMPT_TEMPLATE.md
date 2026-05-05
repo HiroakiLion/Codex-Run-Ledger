@@ -80,6 +80,8 @@ Low.
 ## Review Requirement
 
 Human review required before merge or release.
+Generated review packets are human-handoff artifacts and must not claim final approval.
+Do not self-approve them (for example, avoid `review_status: approved` or `reviewer: chatgpt-self-review`).
 
 ## Result File Instructions
 
@@ -109,6 +111,8 @@ The result file must include a `Review Handoff` section with:
 In the final chat response, include this one-line review handoff:
 
 `Review handoff: use docs/codex-runs/REVIEW_PROTOCOL.md with this slice's prompt, result file, final diff, commits, and verification evidence.`
+
+Add: this is a handoff artifact for human review, not a final approval.
 
 ## Commit / Push Instructions
 

@@ -6,7 +6,14 @@ This project uses semver-style version numbers, with human approval required bef
 
 ## Unreleased
 
-- `0.2.10` preparation updates are pending review.
+- `0.2.11` preparation updates are pending review.
+
+## 0.2.11 - 2026-05-05
+
+- Prevented generated review packets from self-approving by changing `ready_for_chatgpt_review` to `ready_for_human_review`.
+- Clarified in review summary output that generated packets are human-handoff only.
+- Tightened prompt/template docs to explicitly require handoff-only review packets and disallow self-approval markers.
+- Added test coverage for review packet handoff semantics in `review-summary-builder` and prompt template output.
 
 ## 0.2.10 - 2026-05-05
 
